@@ -1,0 +1,38 @@
+cff-version: 1.0.0
+title: "HEP"
+message: "If you use this software, please cite it as below."
+type: software
+doi: "..."
+date-released: "..."
+
+authors:
+  - family-names: "Klein"
+    given-names: "Konstantin"
+    contribution-roles:
+      - "Software"
+      - "Conceptualization"
+    notes: "Original development of HEP"
+
+  - family-names: "Wegener"
+    given-names: "Christian"
+    contribution-roles:
+      - "Software"
+      - "Maintenance"
+    notes: "Original development; further development and maintenance"
+
+  - family-names: "Shao"
+    given-names: "Yaping"
+    contribution-roles:
+      - "Conceptualization"
+      - "Advising"
+    notes: "Conceptual design and consulting"
+
+  - family-names: "Vogel"
+    given-names: "Annika"
+    contribution-roles:
+      - "Software"
+      - "Maintenance"
+    notes: "Further development and maintenance"
+
+repository-code: "https://github.com/ChrisWege/HumanExistencePotential"
+license: "MIT"   
