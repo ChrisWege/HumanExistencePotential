@@ -34,5 +34,12 @@ authors:
       - "Maintenance"
     notes: "Further development and maintenance"
 
+  - family-names: "Köpke"
+    given-names: "Anna-Katharina"
+    contribution-roles:
+      - "Software"
+      - "Maintenance"
+    notes: "Further development and maintenance"
+
 repository-code: "https://github.com/ChrisWege/HumanExistencePotential"
 license: "MIT"   
