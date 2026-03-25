@@ -1,18 +1,3 @@
-"""
-Reads in the position of archaeological sites, monthly temperature and
-precipitation values and reads out the Environmental Human Existence Potential
-computed by logistic regression.
-
-Konstantin Klein
-Institute of Geophysics and Meteorology
-University of Cologne
-konstantin.klein@uni-koeln.de
-
-modifications:
-2024-12-20  Annika Vogel    split into different files, here: only function with methods
-"""
-### Import Modules ###
-
 from netCDF4 import Dataset
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LogisticRegression
@@ -30,15 +15,24 @@ from pathos.multiprocessing import ProcessingPool as Pool
 from itertools import product
 import sys
 
+"""Modeling and helper methods for Human Existence Potential.
+Reads in the position of archaeological sites, monthly temperature and
+precipitation values and reads out the Environmental Human Existence Potential
+computed by logistic regression.
 
-#########################################
+Implementing functions to:
+- extract labeled predictor arrays from gridded inputs,
+- determine presence / pseudo-absence / a-priori absence samples from site locations,
+- assemble training and test datasets,
+- train and apply models (logistic regression, random forest, and a simple Gaussian fit),
+- produce HEP predictions for investigation grids.
+
+Used by ehep_run.py.
+"""
+
 ##### FILL_LABELARRAYS ##################
 # fill label-specific index,coordinate,predicor arrays
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2024-01-17     Annika Vogel    move from pre_abs_sites as new function for all lables
-###
+
 def fill_labelarrays(lonlat_idx,lat,lon,data_set):
 
     # - initialize output arrays
@@ -71,19 +65,9 @@ def fill_labelarrays(lonlat_idx,lat,lon,data_set):
     return label_lat, label_lon, label_pred
 
 
-#########################################
 ##### PRE_ABS_SITES #####################
 # specify presence/pseudo-absence/apriori-absence points (training domain)
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2024-12-20     Annika Vogel    change order of plotting presence/absense
-#2025-01-17     Annika Vogel    generalize filling of label-specific arrays into function
-#2025-02-27     Annika Vogel    check land-sea mask for domain
-#2025-03-31     Annika Vogel    add plotting histogram
-#2025-04-10     Annika Vogel    generalize labeling wrt missig bioclim fields
-#2025-06-24     Annika Vogel    option for labeling apriori abs for loc exceeding limits of presence cond
-###
+
 def pre_abs_sites(lat, lon, dlat, dlon, data_set, sites, mainin_array, start):
     """
      Presence and pseudo-absence grid points will be calculated based on the
@@ -94,13 +78,12 @@ def pre_abs_sites(lat, lon, dlat, dlon, data_set, sites, mainin_array, start):
     :return: 2 arrays with lat-lon values of presence (1) and
              pseudo-absence points (2)
      Stuff that needs to be changed in the absence calculations:
-    #Load in Orography and check if elevation is below 1400m
-    #If any of them gives a "false", the point is a-priori absence
-    #In the calculations, we now have to distinguish these points:
-    ### a-priori absence is always valid
-    ### pseudo-absence is only valid in 1/3 of the times and is randomized
-    ### within the 1000 repetitions, even before the 80/20 cut of the
-    ### validation scheme.
+    Load in Orography and check if elevation is below 1400m
+    If any of them gives a "false", the point is a-priori absence
+    In the calculations, we now have to distinguish these points:
+    - a-priori absence is always valid
+    - pseudo-absence is only valid in 1/3 of the times and is randomized within the 1000 repetitions, 
+        even before the 80/20 cut of the validation scheme.
     """
     print(' pre_radius_site=',cf.pre_radius_site)
     print(' absapri_limits_mode=',cf.absapri_limits_mode)
@@ -263,18 +246,8 @@ def pre_abs_sites(lat, lon, dlat, dlon, data_set, sites, mainin_array, start):
     return pres_pred, abs_pred, apriabs_pred, pres_indices, abs_indices, apriabs_indices
 
 
-#########################################
 ##### TRAINING_TEST_SET #################
 # prepare training and test data
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2024-12-20     Annika Vogel    generalize: training/test ratio as config param
-#                               limits for apriori absense points as config param
-#2025-02-24     Annika Vogel    generalize for deterministic run (using all data for training)
-#                               ->no test data, no statistical evaluation
-#                               fraction of used speudo-absence data as config param
-###
 
 def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_points, apri_points):
     """
@@ -400,14 +373,9 @@ def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_p
     return x_train, y_train, x_test, y_test, pre_abs_matrix
 
 
-#########################################
 ##### TRAIN_LOGREG ######################
 # train logistic regression to data
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-# 2025-03-04    Annika Vogel    initialize polynomials only once, get poly names
-###
+
 def train_logreg(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask):
     """
     Training the logistic regression model with train dataset features (train_x)
@@ -455,14 +423,9 @@ def train_logreg(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask)
     return phi_e, coefs, auc, brier_score
 
 
-#########################################
 ##### TRAIN_RANDOMFOREST ################
 # train random forest to data
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2025-01-21     Annika Vogel    rebugging handling of RandomForest
-###
+
 def train_RandomForest(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask):
     """
     Training the random forest model with train dataset features (train_x)
@@ -495,18 +458,9 @@ def train_RandomForest(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep
     return phi_e, features, auc, brier_score, oob_score
 
 
-
-#########################################
 ##### FIT_SIMPLE_GAUSSIAN ################
 # fit simple Function (Gaussian) to data
-#  -mean, std of each field over presence points
-#  -total HEP=weighted multipl.mean(Gaussians): HEP(i,j) = exp[1/N*sum_n( -(x_n(i,j)-mean_n)^2 / 2*std_n^2 )] ,n=[1,N]:input fields
-# - author: Annika Vogel Wegener, IGMK, UniKoeln
-# - modification history:
-#2025-03-06     Annika Vogel    initial version
-#2025-04-22     Annika Vogel    calc distinctiveness, use as weight for input fields
-#2025-04-23     Annika Vogel    add calc of skewness (for Gamma distr)
-###
+
 def train_simple_fit(pres,iv_set,hep_mask,dlat,dlon):
     # - load modules
     from scipy.stats import skew
@@ -585,14 +539,9 @@ def train_simple_fit(pres,iv_set,hep_mask,dlat,dlon):
     return phi_e
 
 
-#########################################
 ##### MAIN_CALCULATION ##################
 # do main calculation of HEP (parallel)
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2025-01-21     Annika Vogel    rebugging handling of RandomForest
-###
+
 def main_calculation(irun, iv_set, dlat, dlon, training_set, pre, abs, apri, pre_points, abs_points, apri_points,hep_mask):
     """
 
