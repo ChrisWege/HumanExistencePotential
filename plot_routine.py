@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 from netCDF4 import Dataset
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -18,6 +15,11 @@ import matplotlib.colors as mcolors
 from matplotlib.colors import BoundaryNorm
 from mpl_toolkits.basemap import Basemap, cm
 import itertools
+
+"""Plotting routine for HEP. 
+
+Plots the Human Existence Potential depending on Input Data. 
+"""
 
 def plot_potential():
 
