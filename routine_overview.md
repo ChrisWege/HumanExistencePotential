@@ -19,3 +19,6 @@
 
 `ehep_util.py`
 - other utility functions used in the HEP-Model
+
+`plot_routine.py`
+- routine for plotting Human Existence Potential
