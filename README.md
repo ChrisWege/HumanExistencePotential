@@ -37,7 +37,7 @@ More information: https://www.hescor-project.com/
 - `ehep_methods.py` – Model calculation functions  
 - `ehep_inout.py` – Input/output handling functions  
 - `ehep_util.py` – Utility functions  
-- `plot_hep.py` – Script for plotting the HEP map  
+- `plot_routine.py` – Script for plotting the HEP map  
 - `routine_overview.md` – Detailed overview of the model workflow  
 
 ## Prerequisites
