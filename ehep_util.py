@@ -1,37 +1,17 @@
-"""
-Reads in the position of archaeological sites, monthly temperature and
-precipitation values and reads out the Environmental Human Existence Potential
-computed by logistic regression.
-
-Konstantin Klein
-Institute of Geophysics and Meteorology
-University of Cologne
-konstantin.klein@uni-koeln.de
-
-modifications:
-2024-12-20  Annika Vogel    split into different files, here: only unile functions
-2025-04-03  Annika Vogel    define dimensions and related fields as functions (to allow later updating)
-"""
-
-### Import Modules ###
-
 import numpy as np
 import numpy.ma as ma
 import configure as cf
 
+"""
+Provides initialization of global dimensions and statistics, data
+transpose/back-transpose helpers, domain and land/sea checks, and
+polynomial feature construction used across the HEP model.
+"""
 
-#########################################
 ##### INI_GLOBAL_PRE ####################
 # initialize global variables for reading (to be used in all functions across files)
 # !BEFORE reading: temporal dim/arrays, to be reduced later to available fields-only!
-# - author: Annika Vogel, IGMK, UniKoeln
-# - modification history:
-#2025-02-28     Annika Vogel    initialize (move from ehep_run)
-#2025-03-05     Annika Vogel    add allfield_names
-#2025-03-28     Annika Vogel    add idx_use_in_all
-#2025-04-01     Annika Vogel    add option for multiple times in input file, add input_fieldnr
-#2025-04-09     Annika Vogel    split into PRE/POST/USE reading fields and getting availability
-###
+
 def ini_global_pre():
     global runs, nmainin, ninfields, ninfields_use
     global idx_use_in_all
@@ -71,19 +51,10 @@ def ini_global_pre():
     idx_use_in_all = np.zeros(ninfields_use)
 
 
-#########################################
 ##### INI_GLOBAL_POST ###################
 # initialize global variables for calculation (to be used in all functions across files)
 # !AFTER reading: reduce existing dim/arrays wrt available fields, and ini all remaining!
-# - author: Annika Vogel, IGMK, UniKoeln
-# - INPUT: mainidx_to_rm  list of bioclim field indices to be removed (CAUTION: indices, not numbers!)
-# - modification history:
-#2025-02-28     Annika Vogel    initialize (move from ehep_run)
-#2025-03-05     Annika Vogel    add allfield_names
-#2025-03-28     Annika Vogel    add idx_use_in_all
-#2025-04-01     Annika Vogel    add option for multiple times in input file, add mainin_fieldnr
-#2025-04-09     Annika Vogel    split into PRE/POST/USE reading fields and getting availability
-###
+
 def ini_global_post(mainidx_to_rm,mainin_array):
     global nmainin, ninfields
     global mainin_fieldnr
@@ -107,18 +78,9 @@ def ini_global_post(mainidx_to_rm,mainin_array):
     return mainin_array
 
 
-#########################################
 ##### INI_GLOBAL_USE ####################
 # initialize global variables related to _use for calculation (to be used in all functions across files)
-# - author: Annika Vogel, IGMK, UniKoeln
-# - modification history:
-#2025-02-28     Annika Vogel    initialize (move from ehep_run)
-#2025-03-05     Annika Vogel    add allfield_names
-#2025-03-28     Annika Vogel    add idx_use_in_all
-#2025-04-01     Annika Vogel    add option for multiple times in input file, add mainin_fieldnr
-#2025-04-09     Annika Vogel    split into PRE/POST/USE reading fields and getting availability
-#2025-06-26     Annika Vogel    add extended used fields (for simpleFit:infields_ext_mode==1 only)
-###
+
 def ini_global_use():
     global ninfields_use, ninfields_poly
     global trainfield_names, trainpoly_names
@@ -141,13 +103,9 @@ def ini_global_use():
     training_stdev_use = np.zeros(ninfields_useext)
 
 
-#########################################
 ##### INI_DIMS_USE ######################
 # initialize global dimensions of used training data
-# - author: Annika Vogel, IGMK, UniKoeln
-# - modification history:
-#2025-02-28     Annika Vogel    initialize (mod from ehep_methods:training_test_set)
-###
+
 def ini_dims_use(npres, nabs, napriabs):
     global abs_fraction, dataratio_trai
     global npres_use, nabs_use, napriabs_use
@@ -183,15 +141,11 @@ def ini_dims_use(npres, nabs, napriabs):
     napriabs_test = napriabs_use - napriabs_trai
 
 
-#########################################
+
 ##### TRANSPOSE_DATA_SET ################
 # transpose data from 3D(var,lat,lon) to 2D(lat*lon,var)
 # !CAUTION: lat, lon must be in 2nd and 3rd dimension of data_SET!
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2025-01-15     Annika Vogel    generalize dimension of data_set
-###
+
 def transpose_data_set(data_set, dlat, dlon):
     """
     Transpose the data set to fit the predict tool of the logistic regression:
@@ -209,13 +163,9 @@ def transpose_data_set(data_set, dlat, dlon):
     return data_set_transposed
 
 
-#########################################
 ##### BACK_TRANSPOSE_DATA_SET ###########
 # back-transpose data from (lat*lon,:) to 3D(:,lat,lon)
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-###
+
 def back_transpose_data_set(data_set, dlat, dlon):
     """
     Back transpose the predicted data set in lat-lon form
@@ -227,13 +177,9 @@ def back_transpose_data_set(data_set, dlat, dlon):
     return back_transposed
 
 
-#########################################
 ##### CHECK_DOMAIN ########################
 # check if lat/lon fields cover defined domain
-# - author: Annika Vogel, IGMK, UniKoeln
-# - modification history:
-#2025-03-04     Annika Vogel    generalize, move from inout:read_data_ncdf, round +-0.1deg
-###
+
 def check_domain(lat_min,lat_max,lon_min,lon_max,lat_set,lon_set):
     """
 
@@ -266,13 +212,9 @@ def check_domain(lat_min,lat_max,lon_min,lon_max,lat_set,lon_set):
         print('lon_set_max(=',lon_set_max,') ?>? lon_max(=',lon_max,')')
 
 
-#########################################
 ##### LAND_OR_SEA #######################
 # index of land (=1) or sea (=0) for individual lat-lonn coordinate
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-###
+
 def land_or_sea(data_lat, data_lon, lsm, llat, llon):
 
     min_lat = np.where(abs(data_lat - llat) == np.min(abs(data_lat - llat)))[0][0]
@@ -284,7 +226,6 @@ def land_or_sea(data_lat, data_lon, lsm, llat, llon):
         return 0
 
 
-#########################################
 ##### CUT_UNSPECIFIED_REGIONS ###########
 # (currently unused!)
 def cut_unspecified_regions(llat, llon):
@@ -313,7 +254,6 @@ def cut_unspecified_regions(llat, llon):
     return unspecified_point
 
 
-#########################################
 ##### AFRICA_OR_EUROPE ##################
 # (currently unused!)
 def Africa_or_Europe(llat, llon):
@@ -336,17 +276,12 @@ def Africa_or_Europe(llat, llon):
     return continent
 
 
-#########################################
 ##### SECOND_DEGREE_POLYNOMIALS #########
 # create 2nd degree polynomial of input vector
 #     Example: input: array = ([a,b,c],[d,e,f])
 #             output: poly_array = ([1,a,b,c,a^2,a*b,a*c,b^2,b*c,c^2],
 #                                   [1,d,e,f,d^2,d*e,d*f,e^2,e*f,f^2])
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-# 2025-03-04    Annika Vogel    initialze polynomials only once
-###
+
 def second_degree_polynomials(poly,data_set):
 
     polynomials = poly.fit_transform(data_set)
