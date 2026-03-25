@@ -1,33 +1,19 @@
-"""
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2024-12-20     Annika Vogel    move functions from ehep_run.py in new file
-"""
-
 import configure as cf
 import ehep_util as eu
 import sys
 import numpy as np
 import numpy.ma as ma
 from netCDF4 import Dataset
-#########################################
-##### READ_DATA_NCDF ####################
-# getting training/investigation data from netCDF file
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2024-12-20     Annika Vogel    export into new function, call for training and investigation
-#2025-01-13     Annika Vogel    only do spatial subsampling if needed
-#2025-01-15     Annika Vogel    get number of input fields as input parameter
-#2025-02-24     Annika Vogel    generalize: optional all bioclim variables in one field
-#2025-02-25     Annika Vogel    generalize domain selection for different lat/lon directions
-#2025-02-28     Annika Vogel    move domain check to new function, global def of normalization from training
-#2025-03-04     Annika Vogel    define and print out bioclim names, print normalization from training
-#2025-03-31     Annika Vogel    generalize for one bioclim field from different times in input file 'input_filedim_type=time'
-#2025-04-09     Annika Vogel    generalize for any missing bioclim infput file
-#2025-06-26     Annika Vogel    include option to extend input fields to cross-terms (simpleFit-only)
-###
+
+"""I/O and plotting utilities for the HEP workflow.
+
+Contains functions to read and preprocess environmental input fields (NetCDF),
+read archaeological site tables, prepare NetCDF output files for results,
+and create plots (presence/absence maps, histograms, distinctiveness).
+
+Used by ehep_run.py to load, normalize, subsample and export data for HEP calculations.
+"""
+
 def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,input_latname,input_lonname,input_varnames,input_filedim_type,input_onefield,soil_path,soil_varname):
     """
 
@@ -138,38 +124,6 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
         #-dimension of lat/lon field (dlat_set_out)/(dlon_set_out)
         dlat_set_out = lat_set.shape[0]
         dlon_set_out = lat_set.shape[1]
-        ######
-
-        '''
-        #-original(outdated!)
-        y_0 = 0
-        y_end = dlat_set - 1
-        x_0 = 0
-        x_end = dlon_set - 1
-        c = 0
-        for y in range(dlat_set):
-            if np.max(lat_set[y, :]) >= lat_min:
-                if c == 0:
-                    c += 1
-                    y_0 = y
-            if np.min(lat_set[y, :]) >= lat_max:
-                y_end = y
-                break
-        c = 0
-        for x in range(dlon_set):
-            if np.max(lon_set[:, x]) >= lon_min:
-                if c == 0:
-                    c += 1
-                    x_0 = x
-            if np.min(lon_set[:, x]) >= lon_max:
-                x_end = x
-                break
-
-        lat_set = lat_set[y_0:y_end+1,x_0:x_end+1]
-        lon_set = lon_set[y_0:y_end+1,x_0:x_end+1]
-        dlat_set = np.shape(lat_set)[0]
-        dlon_set = np.shape(lat_set)[1]
-        '''
 
     else:
         #-(lat), (lon) fields within domain
@@ -416,14 +370,8 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
         return sample_lat_set, sample_lon_set, sample_dlat_set, sample_dlon_set, sample_data_set, sample_mainin_array_full, sample_iv_set, mask
 
 
-#########################################
 ##### READ_SITES ########################
 # getting archeological site data from file
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2025-01-21     Annika Vogel    generalize to list of input files
-###
 def read_sites():
     import math
 
@@ -505,15 +453,9 @@ def read_sites():
     return sites
 
 
-#########################################
 ##### PREP_OUTFILE ######################
 # prepare netCDF output file
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2025-01-20     Annika Vogel    move from main programm into function
-#2025-02-28     Annika Vogel    used global variables
-###
+
 def prep_outfile(lat,lon,lat_t,lon_t):
 
     # - define output file and dimensions
@@ -576,15 +518,9 @@ def prep_outfile(lat,lon,lat_t,lon_t):
             auc_var_out, bs_var_out, coef_var_out, pre_abs_full_out, pre_abs_var_out
 
 
-
-#########################################
 ##### PLOT_PRESABS ######################
-# plot 
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - modification history:
-#2025-04-24     Annika Vogel    move from ehep_methods.py:pre_abs_sites
-###
+# plot presence and absence
+
 def plot_presabs(lat,lon,abs_lat,abs_lon,pres_lat,pres_lon,apriabs_lat,apriabs_lon,sites):
     # - load modules
     import matplotlib as mpl
@@ -625,15 +561,10 @@ def plot_presabs(lat,lon,abs_lat,abs_lon,pres_lat,pres_lon,apriabs_lat,apriabs_l
     plt.close(fig)
 
 
-#########################################
+
 ##### PLOT_HISTOGRAM ####################
 # plot histogram of normalized fields
-# - author: Annika Vogel, IGMK, UniKoeln
-# - version: ???(new)
-# - modification history:
-#2025-04-17     Annika Vogel    move from ehep_methods.py:pre_abs_sites
-#2025-05-27     Annika Vogel    overplot gamma-distribution
-###
+
 def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array):
     # - load modules
     import matplotlib.pyplot as plt
@@ -835,15 +766,9 @@ def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array
 
 
 
-#########################################
 ##### PLOT_DISTINCT #####################
 # plot distincitveness (all .vs. pres) of human presence conditions for each input field (normalized)
-# - author: Annika Vogel, IGMK, UniKoeln
-# - version: ???(new)
-# - modification history:
-#2025-04-21     Annika Vogel    new
-#2025-06-24     Annika Vogel    plot total distinctiveness, adjust width to eu.ninfields_use
-###
+
 def plot_distinct(pres_means,pres_stds,distinct):
     # - load modules
     import matplotlib.pyplot as plt
