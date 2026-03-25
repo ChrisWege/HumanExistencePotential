@@ -9,19 +9,13 @@ import numpy.ma as ma
 from netCDF4 import Dataset
 import warnings
 
-##############################################
-##### main programm for EHEP calculation #####
-# get input data, calc environmental HEP, output
-#####
-# - author: Christian Wegener, IGMK, UniKoeln
-# - version: ???(from /data/hescor/owf/hep on 2024-12-04)
-# - arguments: -none-
-#
-#   modifications:
-#   2024-12-20  Annika Vogel    reorganize data input functions
-#   2025-01-16  Annika Vogel    generalize dimension to number of input fields
-#   2025-02-28  Annika Vogel    external initialization of global variables
-#####
+""" Main programm for HEP calculation. 
+Calculates the Environmental Human Existence Potential (EHEP) after the following workflow:
+- reads training, investigation and site data,
+- prepares presence/absence samples and output files,
+- runs the HEP calculations in parallel,
+- writes results and diagnostics to a NetCDF output. 
+"""
 
 
 #warnings.simplefilter('error')
