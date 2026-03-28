@@ -23,11 +23,11 @@ def ini_global_pre():
         print('NOTE: no stochastic selection ->Only perform sinlge deterministic run!')
         runs = 1
     else:
-        #-set of stochastic runs
+        # - set of stochastic runs
         runs = cf.runs
 
     # - PRE-set dimension of bioclim fields(to be updated after reading fields [ini_global_post]
-    #if cf.input_filedim_type_t == 'time':
+    # if cf.input_filedim_type_t == 'time':
     #    nmainin = len(cf.input_filetime_fieldnr)
     if cf.input_onefield_t:
         nmainin = cf.nbioclim_def
@@ -44,10 +44,10 @@ def ini_global_pre():
     # - PRE-set list of available field numbers of main input (starting with 1!)
     mainin_fieldnr = np.zeros(nmainin)
 
-    ## - PRE-set array with used main input fieldnames
+    # - PRE-set array with used main input fieldnames
     mainin_fieldnr_use = np.zeros(len(cf.input_var_use))
 
-    ## - PRE-set list of indices of used input fields in all input fields
+    # - PRE-set list of indices of used input fields in all input fields
     idx_use_in_all = np.zeros(ninfields_use)
 
 
@@ -87,10 +87,10 @@ def ini_global_use():
     global ninfields_useext
     global training_mean_use, training_stdev_use
 
-    # --- initialize other dimensions
+    # - initialize other dimensions
     ninfields_poly = int((ninfields_use*(ninfields_use+1))/2 +ninfields_use +1)
     print(' eu.ninfields_poly=',ninfields_poly)
-    #-if simpleFit and infields_ext_mode==1: ini extended used fields
+    # - if simpleFit and infields_ext_mode==1: ini extended used fields
     if cf.model_training == 'simpleFit' and cf.infields_ext_mode == 1:
         ninfields_useext = int( (ninfields_use*(ninfields_use+1))/2 )
     else:
@@ -113,13 +113,13 @@ def ini_dims_use(npres, nabs, napriabs):
     global npres_test, nabs_test, napriabs_test
 
     # - check for valid input parameters
-    #-fraction of used pseudo-absence points
+    # - fraction of used pseudo-absence points
     if cf.abs_fraction <= 0. or cf.abs_fraction > 1.:
         abs_fraction = 1./3.
         print('NOTE: invalid fraction of used pseudo-absence points. Set to 1/3')
     else:
         abs_fraction = cf.abs_fraction
-    #-training/test ratio
+    # - training/test ratio
     if cf.dataratio_trai <= 0. or cf.dataratio_trai > 1.:
         dataratio_trai = 0.8
         print('NOTE: invalid dataratio_trai and/or dataratio_test. Set to 0.8')
@@ -129,7 +129,7 @@ def ini_dims_use(npres, nabs, napriabs):
     # - get number of used data
     npres_use = npres
     napriabs_use = napriabs
-    #-only use predefined fraction of speudo-absence points
+    # - only use predefined fraction of speudo-absence points
     nabs_use = int(np.floor(nabs*abs_fraction))
 
     # - get number of training/test data
@@ -169,7 +169,7 @@ def transpose_data_set(data_set, dlat, dlon):
 def back_transpose_data_set(data_set, dlat, dlon):
     """
     Back transpose the predicted data set in lat-lon form
-"""
+    """
     back_transposed = ma.zeros([dlat, dlon])
     for i in range(dlon):
         back_transposed[:, i] = data_set[range(i * dlat, (i + 1) * dlat)]
@@ -182,7 +182,6 @@ def back_transpose_data_set(data_set, dlat, dlon):
 
 def check_domain(lat_min,lat_max,lon_min,lon_max,lat_set,lon_set):
     """
-
     :return:
     """
     ### CHECK DOMAIN ###
