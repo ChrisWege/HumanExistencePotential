@@ -18,13 +18,13 @@ Calculates the Environmental Human Existence Potential (EHEP) after the followin
 """
 
 
-#warnings.simplefilter('error')
+# warnings.simplefilter('error')
 warnings.filterwarnings("ignore",message="Warning: converting")
 start = datetime.now()
 print('Starting the script!')
 print(start)
 
-#-initialize global variables and pre-dimensions (across all functions and files)
+# - initialize global variables and pre-dimensions (across all functions and files)
 eu.ini_global_pre()
 
 ### INPUT ###
@@ -40,7 +40,7 @@ lat_t, lon_t, dlat_t, dlon_t, training_set, mainin_array_full_t, iv_set_t, hep_m
 print('Reading environmental data for application from file(s):',cf.input_path_i)
 #-reset number of used fields for reading data (may be extended to cross-terms in function)
 if cf.model_training == 'simpleFit' and cf.infields_ext_mode == 1: eu.ninfields_use = eu.ninfields_useorg
-#-read data
+# - read data
 lat, lon, dlat, dlon, investigation_set, mainin_array_full_i, iv_set_i, hep_mask_i = \
         eio.read_data_ncdf('i',cf.gridtype_i,cf.lat_min_i,cf.lat_max_i,cf.lon_min_i,cf.lon_max_i, \
         cf.input_path_i,cf.input_latname_i,cf.input_lonname_i,cf.input_varnames_i,cf.input_filedim_type_i,cf.input_onefield_i, \
