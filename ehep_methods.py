@@ -16,9 +16,8 @@ from itertools import product
 import sys
 
 """Modeling and helper methods for Human Existence Potential.
-Reads in the position of archaeological sites, monthly temperature and
-precipitation values and reads out the Environmental Human Existence Potential
-computed by logistic regression.
+Reads in the position of archaeological sites, monthly temperature and precipitation values and reads out the 
+Environmental Human Existence Potential computed by logistic regression.
 
 Implementing functions to:
 - extract labeled predictor arrays from gridded inputs,
@@ -27,7 +26,6 @@ Implementing functions to:
 - train and apply models (logistic regression, random forest, and a simple Gaussian fit),
 - produce HEP predictions for investigation grids.
 
-Used by ehep_run.py.
 """
 
 ##### FILL_LABELARRAYS ##################
@@ -100,7 +98,7 @@ def pre_abs_sites(lat, lon, dlat, dlon, data_set, sites, mainin_array, start):
     data_lon = np.array(data.variables["lon"])
     land_sea_mask = np.array(data.variables["land_sea_mask"])
     data.close()
-    #-check (training) domain
+    # - check (training) domain
     eu.check_domain(cf.lat_min_t,cf.lat_max_t,cf.lon_min_t,cf.lon_max_t,data_lat,data_lon)
 
     # - initialize index arrays
@@ -150,12 +148,12 @@ def pre_abs_sites(lat, lon, dlat, dlon, data_set, sites, mainin_array, start):
     # re-label points to apriori if exceeding given limits for ANY infield
     def relabel2apri_limits_any(y,x,label):
         if label != 3: #skip if sea/NaN
-            #-check limits for every infield(normalized)
+            # - check limits for every infield(normalized)
             for ifield in range(eu.ninfields_use):
                 if data_set[ifield,y,x] < pres_min[ifield] or data_set[ifield,y,x] > pres_max[ifield]:
                     return [y,x,1] #change to apriori-absence
     
-        #-if no infield exceeds limits
+        # - if no infield exceeds limits
         return [y,x,label] #keep label
     #*** ***#
 
@@ -165,12 +163,12 @@ def pre_abs_sites(lat, lon, dlat, dlon, data_set, sites, mainin_array, start):
         if label == 3: #skip if sea/NaN
             return [y,x,label] #keep label
 
-        #-check limits for every infield(normalized)
+        # - check limits for every infield(normalized)
         for ifield in range(eu.ninfields_use):
             if data_set[ifield,y,x] >= pres_min[ifield] and data_set[ifield,y,x] <= pres_max[ifield]:
                 return [y,x,label] #keep label(if any field lies within limits)
 
-        #-if any infield exceeds limit
+        # - if any infield exceeds limit
         return [y,x,1] #change to apriori-absence
     #*** ***#
     
@@ -180,28 +178,28 @@ def pre_abs_sites(lat, lon, dlat, dlon, data_set, sites, mainin_array, start):
     gridlabels = pool.amap(label_gridpoints,latlon_yx[:,0],latlon_yx[:,1])
     gridlabels = np.array(gridlabels.get())
 
-    #-re-label points to apriori if exceeding min/max of presence conditions
+    # - re-label points to apriori if exceeding min/max of presence conditions
     if cf.absapri_limits_mode == 2 or cf.absapri_limits_mode == 3:
         print('re-labeling to apriori when exceeding limits of any presence cond...')
-        #-(for re-label only!):extract gridpoint indices for presence
+        # - (for re-label only!):extract gridpoint indices for presence
         for k in range(len(gridlabels)):
            if gridlabels[k,2] == 0:
                 pres_indices.append([gridlabels[k,0],gridlabels[k,1]])
 
-        #-(for re-label only!):extract coordinate and predictor array for presence
+        # - (for re-label only!):extract coordinate and predictor array for presence
         pres_lat, pres_lon, pres_pred = fill_labelarrays(pres_indices,lat,lon,data_set)
-        #-calc min/max at presence points for each infield
+        # - calc min/max at presence points for each infield
         pres_max = np.zeros(eu.ninfields_use)
         pres_min = np.zeros(eu.ninfields_use)
         for ifield in range(eu.ninfields_use):
             pres_ifield = [row[ifield] for row in pres_pred]
             pres_max[ifield] = np.nanmax(pres_ifield)
             pres_min[ifield] = np.nanmin(pres_ifield)
-        #-re-label pseudo absence points(parallel)
+        # - re-label pseudo absence points(parallel)
         pool = Pool(cf.process_count)
         if cf.absapri_limits_mode == 2:
             gridlabels = pool.amap(relabel2apri_limits_any,gridlabels[:,0],gridlabels[:,1],gridlabels[:,2])
-        else: #absapri_limits_mode == 3
+        else: # absapri_limits_mode == 3
             gridlabels = pool.amap(relabel2apri_limits_all,gridlabels[:,0],gridlabels[:,1],gridlabels[:,2])
 
         gridlabels = np.array(gridlabels.get())
@@ -265,7 +263,7 @@ def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_p
 
     predictors_absence = random.sample(abs_data,len(abs_data))
     abs_points_shuffled = random.sample(abs_points,len(abs_points))
-    ##-only use predefined fraction of speudo-absence points
+    # - only use predefined fraction of speudo-absence points
     predictors_absence = predictors_absence[0:eu.nabs_use]
     abs_points_shuffled = abs_points_shuffled[0:eu.nabs_use]
 
@@ -280,7 +278,7 @@ def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_p
         train_absapri_only = cf.train_absapri_only
 
     # - fill training data arrays
-    #-get dimensions
+    # - get dimensions
     if cf.train_absapri_only:
         nabs_trai = 0
     else:
@@ -289,7 +287,7 @@ def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_p
     ntrai = eu.npres_trai+nabs_trai+eu.napriabs_trai
     iapri_trai_start = eu.npres_trai+nabs_trai
     
-    #-fill arrays
+    # -fill arrays
     if len(np.shape(data_set)) > 2:
         x_train = np.zeros([ntrai,len(data_set)])
         if eu.napriabs_trai > 0:
@@ -312,7 +310,7 @@ def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_p
     y_train[0:eu.npres_trai] += 1
 
     # - fill testing data arrays
-    #-get dimensions
+    # - get dimensions
     if cf.train_absapri_only:
         nabs_test = 0
     else:
@@ -320,7 +318,7 @@ def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_p
 
     ntest = eu.npres_test+nabs_test+eu.napriabs_test
     iapri_test_start = eu.npres_test+nabs_test
-    #-fill arrays
+    # - fill arrays
     if len(np.shape(data_set)) > 2:
         x_test = np.zeros([ntest,len(data_set)])
         if eu.napriabs_test > 0:
@@ -363,9 +361,9 @@ def training_test_set(data_set, pre_data, abs_data, apri_data, pre_points, abs_p
         for k in range(eu.napriabs_trai):
             pre_abs_matrix[apri_points_shuffled[k][0], apri_points_shuffled[k][1]] = 0
 
-    #print("NAN? ",np.count_nonzero(np.isnan(x_train)))
+    # print("NAN? ",np.count_nonzero(np.isnan(x_train)))
     x_train[np.isnan(x_train)] = 0.
-    #print("NAN? ",np.count_nonzero(np.isnan(x_train)))
+    # print("NAN? ",np.count_nonzero(np.isnan(x_train)))
     y_train[np.isnan(y_train)] = 0.
     x_test[np.isnan(x_test)] = 0.
     y_test[np.isnan(y_test)] = 0.
@@ -385,7 +383,7 @@ def train_logreg(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask)
     poly = PolynomialFeatures(degree=2)
 
     # - perform logistic regression for 2nd degree polynomials
-    #-2nd order polynomials of each training input vector (=diff predictors at each location)
+    # - 2nd order polynomials of each training input vector (=diff predictors at each location)
     x_train = eu.second_degree_polynomials(poly,x_train)
     eu.trainpoly_names = poly.get_feature_names_out(input_features=eu.trainfield_names)
     trained_logreg = LogisticRegression(penalty='l1', C=cf.logreg_lasso, fit_intercept=False,
@@ -398,7 +396,7 @@ def train_logreg(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask)
 
     # - calc modelled outcome (here: HEP) for (2nd order poly of) investigation data
     iv_set = eu.second_degree_polynomials(poly,iv_set)
-    #-get probability outcome
+    # - get probability outcome
     prediction = trained_logreg.predict_proba(iv_set)
     phi_e = eu.back_transpose_data_set(prediction[:, 1], dlat, dlon)
     phi_e.mask = hep_mask
@@ -407,14 +405,14 @@ def train_logreg(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask)
     # - statistical evaluation of model with (2nd order poly of) testing data
     if x_test.shape[0] > 0:
         x_test = eu.second_degree_polynomials(poly,x_test)
-        #-get probability outcome
+        # - get probability outcome
         y_test = trained_logreg.predict_proba(x_test)[:, 1]
-        #-brier score
+        # - brier score
         y_test_brier = 1. / (1 + np.exp(-coefs[0] * x_test[:, 0]))
         brier_score1 = sum((y_true - y_test) ** 2)
         brier_score2 = sum((y_true - y_test_brier) ** 2)
         brier_score = 1 - brier_score1 / brier_score2
-        #-area-under-curve
+        # - area-under-curve
         auc = roc_auc_score(y_true, y_test)
     else:
         brier_score = -1.
@@ -439,7 +437,7 @@ def train_RandomForest(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep
     rf.fit(x_train, y_train)
 
     # - calc modelled outcome (here: HEP) for investigation data
-    #-get probability outcome
+    # - get probability outcome
     prediction = rf.predict_proba(iv_set)
     phi_e = eu.back_transpose_data_set(prediction[:, 1], dlat, dlon)
     phi_e.mask = hep_mask
@@ -447,11 +445,11 @@ def train_RandomForest(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep
     features = rf.feature_importances_
 
     # - statistical evaluation of model with testing data
-    #-get probability outcome
+    # - get probability outcome
     y_test = rf.predict_proba(x_test)[:, 1]
-    #-brier score
+    # - brier score
     brier_score = sum((y_true - y_test) ** 2) / len(y_true)
-    #-area-under-curve
+    # - area-under-curve
     auc = roc_auc_score(y_true, y_test)
     oob_score = rf.oob_score_
 
@@ -501,34 +499,34 @@ def train_simple_fit(pres,iv_set,hep_mask,dlat,dlon):
                 ',-> a=',pres_gamma_alpha[iuse],', b=',pres_gamma_beta[iuse],', c=',pres_gamma_shift[iuse])
 
         # - calc distinctiveness
-        #-difference in means (mean over all points in training domain =0 per def of normalization)
+        # - difference in means (mean over all points in training domain =0 per def of normalization)
         dmeans[iuse] = pres_means[iuse] - 0.
-        #-difference in standard deviations (std over all points in training domain =1 per def of normalization)
+        # - difference in standard deviations (std over all points in training domain =1 per def of normalization)
         dstds[iuse] = pres_stds[iuse] - 1.
-        #-total distinctiveness: root mean square(delta mean,delta stdev)
-        #distinct[iuse] = dmeans[iuse]**2+dstds[iuse]**2 #np.sqrt
-        #(alternative: use only stdev->variance, ignore all fields with stdev>0)
+        # - total distinctiveness: root mean square(delta mean,delta stdev)
+        # distinct[iuse] = dmeans[iuse]**2+dstds[iuse]**2 #np.sqrt
+        # (alternative: use only stdev->variance, ignore all fields with stdev>0)
         distinct[iuse] = dmeans[iuse]**2+min(dstds[iuse],0.)**2 #=...+max(-dstds,0)**2
-        #distinct[iuse] = max(-dstds[iuse],0.)**2 #=only use negative dstdev =smaller stdev for pres
+        # distinct[iuse] = max(-dstds[iuse],0.)**2 #=only use negative dstdev =smaller stdev for pres
         if dstds[iuse] >= 0.:
             print('normalized stdev of ',eu.trainfield_names[iuse],' larger for presence-points than for total domain ->reduced weight!')
 
     distinct_sum = np.sum(distinct)
     for iuse in range(eu.ninfields_use):
         # - calc normalized weight wrt input fields
-        #weight[iuse] = 1./eu.ninfields_use #(org,no weight)
+        # weight[iuse] = 1./eu.ninfields_use #(org,no weight)
         weight[iuse] = distinct[iuse]/distinct_sum
         # - application to investigation data: HEP component for each field
         lnphi_i[:,iuse] = - weight[iuse]* ((iv_set[:,iuse]-pres_means[iuse])**2) / (2*(pres_stds[iuse]**2))
 
         print('distincit(mean-part)=',dmeans[iuse]**2,', std-part=',min(dstds[iuse],0.)**2)
         print(eu.trainfield_names[iuse],': distinctiveness(rms)=',distinct[iuse], ' ->weight=',weight[iuse])
-        #print('input field weights=',weight)
+        # print('input field weights=',weight)
 
     # - finalize total prediction
     phi_1d = np.exp(np.sum(lnphi_i,axis=1)) #(npoints)
     phi_e = eu.back_transpose_data_set(phi_1d[:], dlat, dlon) #(nx,ny)
-    #prediction[:, 1]
+    # prediction[:, 1]
     phi_e.mask = hep_mask #(nx,ny)
     phi_e.filled(0.)
     print('HEP range: min=',np.min(phi_e),', mean=',np.mean(phi_e),', max=',np.max(phi_e))
@@ -554,19 +552,19 @@ def main_calculation(irun, iv_set, dlat, dlon, training_set, pre, abs, apri, pre
 
     # - train model fit on training data
     if cf.model_training == 'rf':
-        #-random forest
+        # - random forest
         phi_e, features, auc, brier_score, obb_score = \
             train_RandomForest(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask)
         return phi_e, features, auc, brier_score, pre_abs_matrix #, obb_score
 
     elif cf.model_training == 'simpleFit':
-        #-simple Gaussian fit
+        # - simple Gaussian fit
         phi_e = train_simple_fit(pre, iv_set, hep_mask, dlat, dlon)
 
         return phi_e, [0.], 0., 0., pre_abs_matrix
 
     else: #'logreg'
-        #-logistic regression
+        # - logistic regression
         phi_e, coef, auc, brier_score = \
             train_logreg(x_train, y_train, x_test, y_true, iv_set, dlat, dlon, hep_mask)
         if irun == 0:
