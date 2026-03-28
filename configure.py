@@ -1,3 +1,20 @@
+"""Central configuration for the HEP workflow.
+Before running the model data paths need to be defined in this configuration file. 
+
+It defines the experiment setup used by the rest of the pipeline, including:
+
+- Technical runtime options (for example, process count).
+- Input data sources and naming conventions (land-sea mask, climate, vegetation, soil, and site files).
+- Region/domain bounds and grid metadata for both training and investigation datasets.
+- Model preparation and fitting choices (variable selection, presence/absence sampling, run count, and model hyperparameters).
+- Plotting and output destinations.
+
+For convenience and easy switching between data and projects several sections are conditionally configured from key strings (for
+example, region name in `expname_common` or dataset type in `input_path_t`), so changing those values can automatically switch
+related settings.
+
+"""
+
 ### Import Modules ###
 import copy
 
@@ -36,9 +53,7 @@ else: #'Africa'
     lon_max_t = 55
 # - main input fields (bioclim,vegetation)
 # path to main input file for training (string)
-#input_path_t = '/data/hescor/anvogel/input-data/climate-data/800k_Armstrong23_HadCM/tevt0/tevt0_bioclim.nc'
-#input_path_t = '/data/hescor/pschluet/pastclim/Krapp2021/Krapp2021_' #eg ...'bio07_v1.4.0.nc'
-input_path_t = '/data/hescor/anvogel/input-data/vegetation-data/paleoVeg_fraction_grouped/veg_model_age_77000.nc' #eg ...'bio07_v1.4.0.nc'
+input_path_t = 'PATH/TO/INPUT_DATA/bioclim.nc' #e.g. BioClim Dataset by Krapp2021
 if 'paleoVeg' in input_path_t: #paleoVeg vegetation fractions
     input_latname_t = 'y'     # name of lat variable in training files (string)
     input_lonname_t = 'x'     # name of lon variable in training files (string)
@@ -77,7 +92,7 @@ else: #eg 'Armstrong' #Armstrong bioclim data specific setup
 
 # - soil
 # path to input soil file for training (string)
-soil_path_t = '' #'/data/hescor/cwegener/Central_Europe/Band_Neolithikum/data/LBK_soil_map_raster_EU_interpol.nc'
+soil_path_t = '/PATH/TO/SOIL_DATA' #'/data/hescor/cwegener/Central_Europe/Band_Neolithikum/data/LBK_soil_map_raster_EU_interpol.nc'
 soil_varname_t = 'Band1'    # name of soil field in training soil file (string)
 
 ### investigation input & config (for application of HEP parameters) ###
@@ -112,9 +127,8 @@ soil_varname_i = soil_varname_t # name of soil field in investigation soil file 
 sites_region = 'all'        # option for area subselection (default 'all' / 'east':lon>10deg / 'west':lon<=10deg, string)
 sites_latname = 'Latitude'     # name of lat variable in site files (string)
 sites_lonname = 'Longitude'     # name of lon variable in site files (string)
-# list of paths to input files with archeological site data (list of strings)
-sites_path = ['/data/hescor/anvogel/input-data/human-data/HESCOR_'+expname_common+'.xlsx']
-#sites_path = ['/data/hescor/anvogel/input-data/human-data/HESCOR_southern_Africa.xlsx'] #TMP:sites from southernAfrica only
+# path to input files with archeological site data (list of strings)
+sites_path = ['/PATH/TO/SITE_DATA'+expname_common+'.xlsx']
 
 
 ### calculation config ###
@@ -157,7 +171,7 @@ logreg_tol = 1e-2           # tolerance limit for convergence of logistic regres
 logreg_max_iter = 100 #1000 ref:15000  # maximal number of iterations for fit convergence of logistic regression (default 100, int)
 
 ### plot & output config ###
-output_path_common = '/data/hescor/anvogel/HEP-output'      # common part of output path for plots and data (string)
+output_path_common = '/PATH/TO/OUTPUT'      # common part of output path for plots and data (string)
 # - plots
 annotate = False        # flag if annotation text to be plotted (flag)
 text_anno = "d)"        # annotation text  in plot (string)
