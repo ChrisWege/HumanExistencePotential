@@ -124,9 +124,9 @@ soil_varname_i = soil_varname_t # name of soil field in investigation soil file 
 
 
 ### site input & config ###
-sites_region = 'all'        # option for area subselection (default 'all' / 'east':lon>10deg / 'west':lon<=10deg, string)
+sites_region = 'all'           # option for area subselection (default 'all' / 'east':lon>10deg / 'west':lon<=10deg, string)
 sites_latname = 'Latitude'     # name of lat variable in site files (string)
-sites_lonname = 'Longitude'     # name of lon variable in site files (string)
+sites_lonname = 'Longitude'    # name of lon variable in site files (string)
 # path to input files with archeological site data (list of strings)
 sites_path = ['/PATH/TO/SITE_DATA'+expname_common+'.xlsx']
 
