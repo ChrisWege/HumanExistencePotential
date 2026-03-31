@@ -39,6 +39,8 @@ More information: https://www.hescor-project.com/
 - `ehep_util.py` – Utility functions  
 - `plot_routine.py` – Script for plotting the HEP map  
 - `routine_overview.md` – Detailed overview of the model workflow  
+- `site_locations.py` – Generates site locations, presence and a-priori absence points (example data)
+- `land_sea_mask.py` – Generates a land sea mask (example data)
 
 ## Prerequisites
 
