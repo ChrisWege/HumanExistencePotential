@@ -26,9 +26,7 @@ def plot_potential():
     ############## CONFIG ###############
     # - model input
     stat_type = 'mean' #'mean' 'stdev'
-    #path = '/data/hescor/anvogel/HEP-output/2-3_sAfrica-Krapp_compare_extCross_absFrac_radius_apriLimit2'
-    #path = '/data/hescor/anvogel/HEP-output/2-3_sAfrica-paleoVeg'
-    path = '/data/hescor/akoepke/HEP-output_v012026/bootstrapping'
+    path = '/PATH/TO/INPUT/DIRECTORY'
     expname_common = 'southern_Africa' #'sAfrica' #'southern_Africa'
     hep_indata = 'Krapp21' #'paleoVeg-grouped' #'Krapp21'
     hep_time = '' #'-77ka-E17p5' #'-125ka' #'' '-125ka'
@@ -36,25 +34,12 @@ def plot_potential():
     hep_sampling = 'absFrac1-10' #'50x08' 'det' 'absFrac2-3' 'det_wgt-distinct' 'meanPnegstdev2-det'
     hep_radius = '50' #50 30 80
     hep_infields = 'bioAll' #'bioAll' 'bioAll-excl8-9' 'bio1-8-10-16' 'vegAll'
-    hep_other = '_apriLimit2'
-    #filename_common = expname_common+'-Krapp21_simpleGauss-det_radius50_bioAll'
-    #filename_common = expname_common+'-Krapp21_simpleGauss-det_radius50_bio1-13-14'
-    #filename_common = expname_common+'-Krapp21_logreg-det_radius50_bio1-8-10-16'
-    #filename_common = expname_common+'-Krapp21_logreg-det_radius50_bioAll'
-    #filename_common = expname_common+'-Krapp21_logreg-50x08_radius50_bioAll'
-    #filename_common = expname_common+'-Krapp21_logreg-50x08_radius50_bio1-8-10-16'
-    #filename_common = expname_common+'-'+hep_indata+hep_time+'_'+hep_method+'-'+hep_sampling+'_radius'+hep_radius+'_'+hep_infields+hep_other #logreg-50x08_radius50_bioAll'
+    hep_other = '_apriLimit2' #'' '_apriLimit2' '_apriLimit2-10' '_apriLimit2-20'
     input_file = path+'/hep-out.nc'
-    #input_file = path+'/hep-out_'+filename_common+'.nc'
-    #output_file = path+'/hep-plot_'+filename_common+'-'+stat_type+'.pdf'
-    #input_file = '/data/hescor/cwegener/Central_Europe/Band_Neolithikum/results/LBK_V4CHELSA_oldLBK_presoil_bio3.nc'
-    ##input_file = '/data/hescor/cwegener/Central_Europe/Band_Neolithikum/results/LBK_V4_oldLBK_presoil.nc'
-    #output_file = '/data/hescor/cwegener/Central_Europe/Band_Neolithikum/plots/for_presentation/LBK_V4CHELSA_oldLBK_avg_HEP_presoil_trim_bio3.pdf'
     print('reading intput file:',input_file)
 
     # - site input
-    #path_sites = ['/data/hescor/cwegener/Central_Europe/Band_Neolithikum/data/fullLBK_messy.xlsx']
-    path_sites = ['/data/hescor/anvogel/input-data/human-data/HESCOR_'+expname_common+'.xlsx']
+    path_sites = ['/PATH/TO/SITE/FILE1.xlsx'] 
     sites_latname = 'Latitude'     # name of lat variable in site files (string)
     sites_lonname = 'Longitude'
 
@@ -67,14 +52,6 @@ def plot_potential():
 
     # - output config
     stat_longname = 'HEP'
-
-    #output_file = input_file+'/hep-plot_'+filename_common #+'-'+stat_type+'.pdf'
-    #if not 'det' in input_file:
-     #   output_file = output_file+'-'+stat_type
-      #  stat_longname = stat_longname+stat_type+'(wrt spatial sampling)'
-    #else:
-     #   stat_type = 'mean'
-
     output_file = path+'/hep-plot.pdf'
 
     # - plot config
@@ -82,6 +59,7 @@ def plot_potential():
     annotate = False
     text_anno = "b)"
     contourbar = True
+    plot_title = 'HEP Model'  # e.g. 'My HEP experiment name'
     if stat_type == 'stdev':
         colorscheme = 'YlOrBr' #'YlGnBu' #'viridis' #'RdBu_r' 'seismic' 'bwr' #'coolwarm'
     else:
@@ -161,18 +139,13 @@ def plot_potential():
     par = m.drawparallels(np.arange(-50.,100.,plot_coord_step_lat), linewidth=.6, labels=[True,False,False,False])
     merid = m.drawmeridians(np.arange(0.,360.,plot_coord_step_lon), linewidth=.6, labels=[False,False,True,False])
     lon_2D, lat_2D = np.meshgrid(lon, lat) #convert 1D lat/lon arrays into 2D arrays
-    #print('lon/lat.shape=',lon.shape,lat.shape)
-    #print('lon/lat.shape=',lon_2D.shape,lat_2D.shape)
     print('hep_plot.shape=',hep_plot.shape)
     lon_map, lat_map = m(lon_2D, lat_2D) # compute map proj coordinates
     POT = m.pcolormesh(lon_map, lat_map, hep_plot, cmap=colorscheme, vmin=plot_min,vmax=plot_max)
-    # add colorbar
-    #cbar = m.colorbar(POT,location='bottom',pad="5%")
-    #cbar.set_label('mm')
     POT.cmap.set_bad('white')
     POT.cmap.set_under('white')
     POT.cmap.set_over('white')
-    #print('plot test6')
+    
 
     if contourbar == True:
         cbar = fig.colorbar(POT, orientation='horizontal',fraction=0.046,pad=0.04,shrink=0.85, ticks=np.linspace(plot_min,plot_max,11))
@@ -181,10 +154,8 @@ def plot_potential():
     if annotate == True:
         plt.annotate(text_anno,xy=(.02,.95),bbox={'facecolor':'white'},xycoords='axes fraction')
 
-    #print('plot test7')
     POT.set_edgecolor("face")
 
-    #print('plot test11')
     sites = 0
     if not ignore_sites:
         for path in path_sites:
@@ -231,8 +202,6 @@ def plot_potential():
             '''
             sites += 1
     
-        #print('sites: lat=',lat_phase1)
-        #print('sites: lon=',lon_phase1)
         sites_lon_map, sites_lat_map = m(sites_lon, sites_lat) # compute map proj coordinates
         plt.scatter(sites_lon_map, sites_lat_map, s=site_plotsize, marker='x', c='k', label=site_label,alpha=site_alpha) #,transform=ccrs.PlateCarree())
     
@@ -240,7 +209,6 @@ def plot_potential():
 
     print('=> output plot-file:',output_file)
     plt.savefig(output_file, bbox_inches='tight')
-    #plt.show() 
     plt.close(fig)
 
 if __name__ == '__main__':
