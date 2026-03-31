@@ -108,39 +108,39 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
         y_domain = y_domain[0:ny]
         x_domain = x_domain[0:nx]
 
-        #-get domain boundary indices (CAUTION: to be tested!)
-        #(assumes sorted coordinated, any order)
+        # - get domain boundary indices (CAUTION: to be tested!)
+        # (assumes sorted coordinated, any order)
         y_0 = int(np.min(y_domain))
         y_end = int(np.max(y_domain))
         x_0 = int(np.min(x_domain))
         x_end = int(np.max(x_domain))
 
-        #-reduce coordinate fields and update dimensions (CAUTION: to be tested!)
+        # - reduce coordinate fields and update dimensions (CAUTION: to be tested!)
         lat_set = lat_set[y_0:y_end+1,x_0:x_end+1]
         lon_set = lon_set[y_0:y_end+1,x_0:x_end+1]
-        #-2D dimensions of pther fields (:,dlat_set,dlon_set)
+        # - 2D dimensions of pther fields (:,dlat_set,dlon_set)
         dlat_set = ny
         dlon_set = nx
-        #-dimension of lat/lon field (dlat_set_out)/(dlon_set_out)
+        # - dimension of lat/lon field (dlat_set_out)/(dlon_set_out)
         dlat_set_out = lat_set.shape[0]
         dlon_set_out = lat_set.shape[1]
 
     else:
-        #-(lat), (lon) fields within domain
+        # - (lat), (lon) fields within domain
         lat_y = lat_set[(lat_set >= lat_min) & (lat_set <= lat_max)]
         lon_x = lon_set[(lon_set >= lon_min) & (lon_set <= lon_max)]
 
-        #-domain boundaries
+        # - domain boundaries
         y_0 = np.where(lat_set==lat_y[0])[0][0]
         y_end = np.where(lat_set==lat_y[-1])[0][0]
         x_0 = np.where(lon_set==lon_x[0])[0][0]
         x_end = np.where(lon_set==lon_x[-1])[0][0]
         lat_set = lat_y #=lat_set[y_0:y_end+1]
         lon_set = lon_x #=lon_set[x_0:x_end+1]
-        #-2D dimensions of other fields (:,dlat_set,dlon_set)
+        # - 2D dimensions of other fields (:,dlat_set,dlon_set)
         dlat_set = len(lat_set)
         dlon_set = len(lon_set)
-        #-dimension of each lat/lon field (dlat_set_out)/(dlon_set_out)
+        # - dimension of each lat/lon field (dlat_set_out)/(dlon_set_out)
         dlat_set_out = dlat_set
         dlon_set_out = dlon_set
 
@@ -173,7 +173,7 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
                 imain_avail += 1
                 
 
-    else: #'field'
+    else: # 'field'
         # - all fields in one file, only one time in file
         try:
             input_data = Dataset(input_path)
@@ -194,7 +194,7 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
                     imain_avail += 1
 
         else:
-            #-each variable in separate field(lat,lon)
+            # - each variable in separate field(lat,lon)
             for imain in range(eu.nmainin):
                 try:
                     mainin_array[imain_avail] = input_data.variables[input_varnames[imain]][y_0:y_end+1, x_0:x_end+1]
@@ -221,7 +221,7 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
         soil_data.close()
         mainin_array[isoilarray] = soil_array
 
-    #mainin_array[np.where(mainin_array > 1e+30)] = ma.masked
+    # mainin_array[np.where(mainin_array > 1e+30)] = ma.masked
     mainin_array = ma.masked_invalid(mainin_array)
     mainin_array.filled(0.)
     #if _t:
@@ -240,12 +240,12 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
             else:
                 eu.allfield_names[i] = cf.input_varnames_t[i]
 
-        #-calc normalization: domain mean and std of each field
+        # - calc normalization: domain mean and std of each field
         for i in range(eu.ninfields):
             eu.training_mean_all[i] = np.mean(mainin_array[i])
             eu.training_stdev_all[i] = np.std(mainin_array[i])
 
-            #-print normalization values
+            # - print normalization values
             print('statistics of ',eu.allfield_names[i],' (training data): mean=',eu.training_mean_all[i],', stdev=',eu.training_stdev_all[i])
 
     # - normalize input fields wrt spatial mean and stdev (always from training domain, for consistent transformation!)
@@ -271,7 +271,7 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
                 iuse += 1
 
         elif ifield == isoilarray:
-            #-indices of used fields in all fields
+            # - indices of used fields in all fields
             eu.idx_use_in_all[iuse] = ifield
             iuse += 1
 
@@ -294,7 +294,7 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
             eu.training_mean_use[iuse] = eu.training_mean_all[ifield]
             eu.training_stdev_use[iuse] = eu.training_stdev_all[ifield]
 
-    #-if simpleFit and infields_ext_mode==1: calc and save stats of cross-terms of used fields
+    # - if simpleFit and infields_ext_mode==1: calc and save stats of cross-terms of used fields
     if use_type == 't' and cf.model_training == 'simpleFit' and cf.infields_ext_mode == 1:
         eu.ninfields_useorg = eu.ninfields_use #keep original number of unsed input fields
         icross = eu.ninfields_use
@@ -308,7 +308,7 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
                 eu.trainfield_names[icross] = eu.trainfield_names[iuse]+' '+eu.trainfield_names[juse]
                 icross += 1
 
-    #-if simpleFit and infields_ext_mode==1: normalize cross-terms (for training&investigation data)
+    # - if simpleFit and infields_ext_mode==1: normalize cross-terms (for training&investigation data)
     if cf.model_training == 'simpleFit' and cf.infields_ext_mode == 1:
         icross = eu.ninfields_use
         for juse in range(eu.ninfields_use):
@@ -319,7 +319,7 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
                 data_set[icross] = (crossfield_tmp - eu.training_mean_use[icross])/ eu.training_stdev_use[icross]
                 icross += 1
 
-        #-from now on: treat extended cross-fields as part of infields used
+        # - treat extended cross-fields as part of infields used
         eu.ninfields_use = eu.ninfields_useext
         print('include cross-terms in used input fields... ->extend ninfields_use=',eu.ninfields_use)
 
@@ -418,7 +418,7 @@ def read_sites():
         lat_s = np.array(lat_s)
 
     '''
-    #CAUTION: old, only for preprocessed NCDF files with core ares defined
+    #CAUTION: old, only for preprocessed NCDF files with core areas defined
     else:
         # - read file, select lon&lat
         input_data = Dataset(cf.sites_path)
@@ -627,13 +627,13 @@ def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array
         column_pres = [row[iall] for row in pres_pred_all]
         column_abs = [row[iall] for row in abs_pred_all]
         column_apriabs = [row[iall] for row in apriabs_pred_all]
-        #-normalize wrt whole training domain
+        # - normalize wrt whole training domain
         if cf.plot_hist_norm:
             column_pres = (column_pres-eu.training_mean_all[iall])/eu.training_stdev_all[iall]
             column_abs = (column_abs-eu.training_mean_all[iall])/eu.training_stdev_all[iall]
             column_apriabs = (column_apriabs-eu.training_mean_all[iall])/eu.training_stdev_all[iall]
 
-        #-pre-calc data limits
+        # - pre-calc data limits
         pres_max = np.nanmax(column_pres[:])
         pres_min = np.nanmin(column_pres[:])
         abs_max = np.nanmax(column_abs[:])
@@ -657,7 +657,7 @@ def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array
                     stacked=True, log=cf.plot_hist_log)
         #axs.flat[iplot].plot([0.,0.],color='orange',marker='*',markersize=5)
         
-        #-limit x-axis (for normalized data only)
+        # - limit x-axis (for normalized data only)
         if cf.plot_hist_norm:
             if data_max > cf.plot_hist_max:
                 print('hist: iplot=',iplot,' max exceeded:',abs_max,pres_max) 
@@ -675,7 +675,7 @@ def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array
                 if abs_min < -cf.plot_hist_max: axs.flat[iplot].plot(-cf.plot_hist_max+0.2,1.5,color='orange',alpha=0.8,marker='*',markersize=5)
                 if pres_min < -cf.plot_hist_max: axs.flat[iplot].plot(-cf.plot_hist_max+0.2,1.5,color='blue',alpha=0.8,marker='*',markersize=3)
 
-        #-plot stats of training domain
+        # - plot stats of training domain
         if cf.plot_hist_norm: #by definition of normalization
             mean_all = 0.
             stdev_all = 1.
@@ -698,8 +698,8 @@ def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array
         # - calc stats at presence points
         mean_pres = np.nanmean(column_pres)
         std_pres = np.nanstd(column_pres)
-        #print(fieldname_tmp,'@pres: mean=',mean_pres,', std=',std_pres)
-        #-plot stats at presence points
+        print(fieldname_tmp,'@pres: mean=',mean_pres,', std=',std_pres)
+        # - plot stats at presence points
         axs.flat[iplot].axvline(x=mean_pres,color='blue',linestyle='--') #label = 'mean')
         axs.flat[iplot].axvline(x=mean_pres+std_pres,color='blue', alpha=0.5, linestyle=':')
         axs.flat[iplot].axvline(x=mean_pres-std_pres,color='blue', alpha=0.5, linestyle=':')
@@ -717,10 +717,8 @@ def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array
             from scipy.stats import norm
             dx_bin = (plot_xmax-plot_xmin)/nbins
             x = np.arange(plot_xmin,plot_xmax,dx_bin/10.)
-            #x = np.arange(-cf.plot_hist_max,cf.plot_hist_max,0.1)
             gauss = norm(loc=mean_pres,scale=std_pres).pdf(x)
             fit = gauss*len(column_pres)/np.sqrt(2*np.pi*std_pres**2) #scale to area of hist (=number of points*bin width / area of Gaussian)
-            #fit = gauss*len(column_pres)*dx_bin/np.sqrt(2*np.pi*std_pres**2)
             axs.flat[iplot].plot(x,fit,color='blue',alpha=0.5)
 
             # - overplot Gamma distr
@@ -728,28 +726,26 @@ def plot_histogram(pres_indices,abs_indices,apriabs_indices,lat,lon,mainin_array
             skew_pres = skew(column_pres, nan_policy='omit')
             if skew_pres < 0.:
                 neg_skew = True
-                #-flip x-axis (to ensure positive skweness in calc of gamma-distr)
+                # - flip x-axis (to ensure positive skweness in calc of gamma-distr)
                 skew_pres = -skew_pres
                 mean_pres = -mean_pres
                 x = -x
             else:
                 neg_skew = False
 
-            #-calc parameters of distr
+            # - calc parameters of distr
             gamma_alpha_pres = 4./skew_pres**2
             gamma_beta_pres = 0.5*std_pres*skew_pres
             gamma_shift_pres = mean_pres -2.*std_pres/skew_pres
-            #gamma_shift_pres = -2.*std_pres/skew_pres
-            #-get distribution, scale to area
+            # - get distribution, scale to area
             gamma_fit = gamma.pdf(x,a=gamma_alpha_pres,loc=gamma_shift_pres,scale=gamma_beta_pres)*len(column_pres)/np.sqrt(2*np.pi*std_pres**2)
             if neg_skew: #re-flip x-axis
                 x = -x
 
-            #-plot
+            # - plot
             axs.flat[iplot].plot(x,gamma_fit,color='black')
            
 
-        #axs.flat[iplot].set_ylim(bottom=1.)
         if cf.plot_hist_log:
             plot_ymax = histy.max()
         else:
@@ -791,16 +787,11 @@ def plot_distinct(pres_means,pres_stds,distinct):
     ref_distinct = -np.ceil(np.max(distinct)+.5) #artifically ref for plotting only!
     nplot = len(pres_means)
 
-    # - create plot and plot reference lines for whole training domain
-    #if eu.ninfields_use > 100:
-    #    fig = plt.figure(figsize=(1.*cf.figsize_ref[0],0.5*cf.figsize_ref[1]))
-    #elif eu.ninfields_use > 100
-    #else:
     fig = plt.figure(figsize=(0.5*eu.ninfields_use/20.*cf.figsize_ref[0],0.5*cf.figsize_ref[1]))
 
-    #- mean(all training point)=0 (per def of normalization)
+    # - mean(all training point)=0 (per def of normalization)
     plt.axhline(y=ref_mean,color=clr_mean,linestyle='--',label='mean(all)')
-    #- stdev(all training points)=1 (per def of normliazation)
+    # - stdev(all training points)=1 (per def of normliazation)
     plt.axhline(y=ref_std,color=clr_std,linestyle='--',label='stdev(all)')
     #- total distinct: artifically ref=-1 for plotting only
     plt.axhline(y=ref_distinct,color=clr_distinct,linestyle='-',label='distinct(base)')
