@@ -24,3 +24,26 @@ def create_island_mask(nx=50, ny=50, island_width=0.55, island_height=0.65):
 	return ellipse.astype(np.int8)
 
 
+def write_mask_to_netcdf(output_path, lat, lon, mask):
+	# Write mask to NetCDF with lat/lon dimensions and land_sea_mask variable
+	with Dataset(output_path, "w", format="NETCDF4") as ds:
+		ds.createDimension("lat", len(lat))
+		ds.createDimension("lon", len(lon))
+
+		var_lat = ds.createVariable("lat", "f4", ("lat",))
+		var_lon = ds.createVariable("lon", "f4", ("lon",))
+		var_mask = ds.createVariable("land_sea_mask", "i1", ("lat", "lon"))
+
+		var_lat.units = "degrees_north"
+		var_lon.units = "degrees_east"
+		var_mask.long_name = "synthetic land sea mask for testing"
+		var_mask.flag_values = "0, 1"
+		var_mask.flag_meanings = "sea land"
+
+		var_lat[:] = lat
+		var_lon[:] = lon
+		var_mask[:, :] = mask
+
+
+
+
