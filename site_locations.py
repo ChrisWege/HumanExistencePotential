@@ -43,12 +43,12 @@ prob_presence = expit(-steepness * (gradient_vals - midpoint))
 accepted = np.random.random(len(candidate_lats)) < prob_presence
 presence = np.column_stack([candidate_lats[accepted], candidate_lons[accepted]])[:n_presence]
 
-# Print commands for easier usability 
+# optional: print commands
 print(f"Generated {len(presence)} presence points")
 print(f"Lat range: {presence[:, 0].min():.4f} to {presence[:, 0].max():.4f}")
 print(f"Lon range: {presence[:, 1].min():.4f} to {presence[:, 1].max():.4f}")
 
 # Export to Excel
 df = pd.DataFrame(presence, columns=["Latitude", "Longitude"])
-df.to_excel("/PATH/TO/OUTPUT/presence_locations.xlsx", index=False)
+df.to_excel("/data/hescor/akoepke/HEP-WHB/presence_locations.xlsx", index=False)
 print("Excel file saved!")

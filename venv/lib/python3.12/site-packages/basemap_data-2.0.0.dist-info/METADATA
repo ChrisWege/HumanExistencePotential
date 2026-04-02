@@ -1,0 +1,93 @@
+Metadata-Version: 2.4
+Name: basemap_data
+Version: 2.0.0
+Summary: Data assets for matplotlib basemap
+Author: Jeff Whitaker
+Author-email: jeffrey.s.whitaker@noaa.gov
+Maintainer: The Matplotlib development team
+Maintainer-email: matplotlib-users@python.org
+License: LGPL-3.0-or-later
+Project-URL: Homepage, https://github.com/matplotlib/basemap
+Project-URL: Documentation, https://matplotlib.org/basemap
+Project-URL: Repository, https://github.com/matplotlib/basemap.git
+Project-URL: Issues, https://github.com/matplotlib/basemap/issues
+Keywords: GIS,maps,plots
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9, <4
+Description-Content-Type: text/markdown
+License-File: COPYING
+License-File: COPYING.LESSER
+License-File: LICENSE.epsg
+License-File: LICENSE.mit
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: maintainer
+Dynamic: maintainer-email
+Dynamic: project-url
+Dynamic: requires-python
+Dynamic: summary
+
+# basemap-data
+
+Plot on map projections (with coastlines and political boundaries) using
+[`matplotlib`].
+
+This is a support package for [`basemap`] with the basic data assets
+required by [`basemap`] to work.
+
+## Installation
+
+The package is available on PyPI and can be installed with [`pip`]:
+```python
+python -m pip install basemap-data
+```
+
+## License
+
+The land-sea mask, coastline, lake, river and political boundary data
+are extracted from the [GSHHG] datasets (version 2.3.6) using [GMT]
+(5.x series) and are included under the terms of the [LGPL-3.0-or-later]
+license (see [`COPYING`] and [`COPYING.LESSER`]).
+
+The other files are included under the terms of the [MIT] license. See
+[`LICENSE.epsg`] for the EPSG file (taken from the PROJ.4 package) and
+[`LICENSE.mit`] for the rest.
+
+
+[`matplotlib`]:
+https://matplotlib.org/
+[`basemap`]:
+https://matplotlib.org/basemap/
+[`pip`]:
+https://pip.pypa.io/
+
+[GSHHG]:
+https://www.soest.hawaii.edu/pwessel/gshhg
+[GMT]:
+https://www.generic-mapping-tools.org/
+
+[LGPL-3.0-or-later]:
+https://spdx.org/licenses/LGPL-3.0-or-later.html
+[MIT]:
+https://spdx.org/licenses/MIT.html
+
+[`COPYING`]:
+https://github.com/matplotlib/basemap/blob/v2.0.0/data/basemap_data/COPYING
+[`COPYING.LESSER`]:
+https://github.com/matplotlib/basemap/blob/v2.0.0/data/basemap_data/COPYING.LESSER
+[`LICENSE.epsg`]:
+https://github.com/matplotlib/basemap/blob/v2.0.0/data/basemap_data/LICENSE.epsg
+[`LICENSE.mit`]:
+https://github.com/matplotlib/basemap/blob/v2.0.0/data/basemap_data/LICENSE.mit

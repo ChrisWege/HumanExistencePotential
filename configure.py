@@ -24,9 +24,9 @@ import copy
 process_count = 8   # Number of processes, should be smaller than cpu number
 
 ### general input & config ###
-expname_common = 'southern_Africa' # project specific experiment name: common string in land-sea mask & site files
+expname_common = '' # project specific experiment name: common string in land-sea mask & site files
 # path to input file with land-sea data (string)
-path_land_sea_mask = '/data/hescor/anvogel/input-data/topo-data/landmask_30s_'+expname_common+'.nc'
+path_land_sea_mask = '/data/hescor/akoepke/HEP-WHB/land_sea_mask.nc'
 
 
 # - inputfield-related setup used for training and investigation (for simplicity)
@@ -49,16 +49,17 @@ if 'southern' in expname_common:
     lat_max_t = -16.5
     lon_min_t = 10
     lon_max_t = 40 #sAfrica:exclude desert-population: 17.5
-else: #'Africa'
-    lat_min_t = -36
-    lat_max_t = 40
-    lon_min_t = -20
-    lon_max_t = 55
+else: # use the lat/lon bounds that match arrays (default: land_sea_mask from land_sea_mask.py)
+    # defaults chosen to match the example 50x50 test grid used in site_locations.py
+    lat_min_t = -25
+    lat_max_t = -15
+    lon_min_t = 15
+    lon_max_t = 25
 
 
 # main input fields (bioclim,vegetation) 
 # path to main input file for training (string)
-input_path_t = 'PATH/TO/INPUT_DATA/bioclim.nc' #e.g. BioClim Dataset by Krapp2021
+input_path_t = '/data/hescor/pschluet/pastclim/Krapp2021/Krapp2021_' #e.g. BioClim Dataset by Krapp2021
 # project specific configurations, needs to be changed depending on project and input_path_t
 if 'paleoVeg' in input_path_t: #paleoVeg vegetation fractions
     input_latname_t = 'y'     # name of lat variable in training files (string)
@@ -98,7 +99,7 @@ else: #eg 'Armstrong' #Armstrong bioclim data specific setup
 
 # - soil
 # path to input soil file for training (string)
-soil_path_t = '/PATH/TO/SOIL_DATA' # path to soil data 
+soil_path_t = '' # path to soil data 
 soil_varname_t = 'Band1'           # name of soil field in training soil file (string)
 
 ### investigation input & config (for application of HEP parameters) ###
@@ -130,7 +131,7 @@ sites_region = 'all'           # option for area subselection (default 'all' / '
 sites_latname = 'Latitude'     # name of lat variable in site files (string)
 sites_lonname = 'Longitude'    # name of lon variable in site files (string)
 # path to input files with archeological site data (list of strings)
-sites_path = ['/PATH/TO/SITE_DATA'+expname_common+'.xlsx']
+sites_path = ['/data/hescor/akoepke/HEP-WHB/presence_locations.xlsx']
 
 
 ### calculation config ###
@@ -172,7 +173,7 @@ logreg_max_iter = 100          # maximal number of iterations for fit convergenc
 
 
 ### plot & output config ###
-output_path_common = '/PATH/TO/OUTPUT'      # common part of output path for plots and data (string)
+output_path_common = '/data/hescor/akoepke/HEP-WHB'      # common part of output path for plots and data (string)
 # - plots
 annotate = False        # flag if annotation text to be plotted (flag)
 text_anno = "d)"        # annotation text  in plot (string)
