@@ -1,7 +1,8 @@
 """
 A land-sea mask is a binary grid that indicates whether each grid cell is land or sea. 
+
 In this case it is synthetically generated for testing purposes, with a simple pattern looking like an island. 
-It is not based on real-world data, but serves to demonstrate use a land-sea mask within the HEP model.
+It is not based on real-world data, but serves to demonstrate how to use a land-sea mask within the HEP model.
 The land-sea mask is within a 50x50 grid and can be changed depending on use case. It should have the same domain 
 as the site locations created with site_locations.py. 
 
@@ -43,6 +44,23 @@ def write_mask_to_netcdf(output_path, lat, lon, mask):
 		var_lat[:] = lat
 		var_lon[:] = lon
 		var_mask[:, :] = mask
+
+if __name__ == "__main__":
+	# Keep the same nominal test domain as site_locations.py
+	nx = 50
+	ny = 50
+	lat = np.linspace(-25.0, -15.0, ny)
+	lon = np.linspace(15.0, 25.0, nx)
+
+	land_sea_mask = create_island_mask(nx=nx, ny=ny)
+
+	output_file = "/PATH/TO/OUTPUT/land_sea_mask.nc"
+	write_mask_to_netcdf(output_file, lat, lon, land_sea_mask)
+
+	land_cells = int(np.sum(land_sea_mask == 1))
+	sea_cells = int(np.sum(land_sea_mask == 0))
+
+	print(f"Saved synthetically generated land-sea mask to: {output_file}")
 
 
 
