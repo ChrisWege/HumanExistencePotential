@@ -56,7 +56,7 @@ Further details on data preparation and assumptions are described in `routine_ov
 For an easy start, a set of scripts for generating example data is provided:
 
 - `site_locations.py` – Generates site locations, presence, and a-priori absence points
-- `land_sea_mask.py` – Generates a land-sea mask that fits the site locations
+- `land_sea_mask.py` – Generates a land-sea mask that fits the site locations (Data by [Natural Earth Data](https://www.naturalearthdata.com/), which is a public domain data set)
 
 The **pastclim_Krapp2021** dataset by Krapp et al. (2021) can be downloaded here: [pastclim_Krapp2021 Zenodo](https://zenodo.org/records/8415273).
 
