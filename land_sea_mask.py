@@ -2,9 +2,10 @@
 A land-sea mask is a binary grid that indicates whether each grid cell is land or sea. 
 
 In this case it is synthetically generated for testing purposes, with a simple pattern. 
-It is not based on real-world data, but serves to demonstrate how to use a land-sea mask within the HEP model.
-The land-sea mask is within a 50x50 grid and can be changed depending on use case. It should have the same domain 
-as the site locations created with site_locations.py. 
+It serves to demonstrate how to use a land-sea mask within the HEP model.
+The land-sea mask should have the same domain as the site locations created with site_locations.py. 
+
+The data that is used for the mask is from Natural Earth Data. (see README for Details)
 
 """
 # UNDER CONSTRUCTION
@@ -19,7 +20,7 @@ from shapely.geometry import shape, Point
 from shapely.ops import unary_union
 from shapely.prepared import prep
 
-# Domain defaults matching configure.py example CAUTION: only land, no sea
+# Domain defaults matching configure.py example CAUTION: currently only land, no sea
 LAT_MIN = -25.0
 LAT_MAX = -15.0
 LON_MIN = 15.0
