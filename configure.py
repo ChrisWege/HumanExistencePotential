@@ -95,7 +95,7 @@ else: #eg 'Armstrong' #Armstrong bioclim data specific setup
                                 #           OR list with field-dimension of 'input_filetime_pathfield'
                                 #       !requires 'input_filetime_{fieldname}&{timeid}'
                                 # - TODO'fieldtime' :all fields for diff times in one file, requires time-specific config
-    pre_radius_site = 200 # Radius of the presence around site, CAUTION: ~grid resolution (in km, default: 50)
+    pre_radius_site = 50 # Radius of the presence around site, CAUTION: ~grid resolution (in km, default: 50)
 
 # - soil
 # path to input soil file for training (string)

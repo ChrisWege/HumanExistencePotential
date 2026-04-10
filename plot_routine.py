@@ -26,7 +26,7 @@ def plot_potential():
     ############## CONFIG ###############
     # - model input
     stat_type = 'mean' #'mean' 'stdev'
-    path = '/PATH/TO/INPUT/DIRECTORY'
+    path = '/data/hescor/akoepke/HEP-WHB'
     expname_common = 'southern_Africa' #'sAfrica' #'southern_Africa'
     hep_indata = 'Krapp21' #'paleoVeg-grouped' #'Krapp21'
     hep_time = '' #'-77ka-E17p5' #'-125ka' #'' '-125ka'
@@ -39,7 +39,7 @@ def plot_potential():
     print('reading intput file:',input_file)
 
     # - site input
-    path_sites = ['/PATH/TO/SITE/FILE1.xlsx'] 
+    path_sites = ['/data/hescor/akoepke/HEP-WHB/presence_locations.xlsx'] 
     sites_latname = 'Latitude'     # name of lat variable in site files (string)
     sites_lonname = 'Longitude'
 
@@ -59,7 +59,7 @@ def plot_potential():
     annotate = False
     text_anno = "b)"
     contourbar = True
-    plot_title = 'HEP Model'  # e.g. 'My HEP experiment name'
+    plot_title = 'HEP Model idealized'  # e.g. 'My HEP experiment name'
     if stat_type == 'stdev':
         colorscheme = 'YlOrBr' #'YlGnBu' #'viridis' #'RdBu_r' 'seismic' 'bwr' #'coolwarm'
     else:
