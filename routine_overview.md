@@ -22,3 +22,12 @@
 
 `plot_routine.py`
 - routine for plotting Human Existence Potential
+
+`site_locations.py`
+- generates sites locations
+- only presence points 
+
+`land_sea_mask.py`
+- generates a land-sea-mask using Natural Earth Data
+
+

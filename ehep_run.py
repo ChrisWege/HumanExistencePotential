@@ -10,6 +10,7 @@ from netCDF4 import Dataset
 import warnings
 
 """ Main programm for HEP calculation. 
+
 Calculates the Environmental Human Existence Potential (EHEP) after the following workflow:
 - reads training, investigation and site data,
 - prepares presence/absence samples and output files,

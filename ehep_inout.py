@@ -15,10 +15,6 @@ Used by ehep_run.py to load, normalize, subsample and export data for HEP calcul
 """
 
 def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,input_latname,input_lonname,input_varnames,input_filedim_type,input_onefield,soil_path,soil_varname):
-    """
-
-    :return:
-    """
 
     ### GET INPUT FIELDS ###
     # - get lat-lon fields and dimensions from main input file
@@ -50,22 +46,6 @@ def read_data_ncdf(use_type,gridtype,lat_min,lat_max,lon_min,lon_max,input_path,
         lon_set = lon_set -180.
 
     print('domain lat:',lat_min,'°N - ',lat_max,'°N , lon:',lon_min,'°E - ',lon_max,'°E')
-
-    '''
-    # - CAUTION TEST-only:test 'curvilinear' with 'latlon' input...
-    print("!!!CAUTION: USING 'latlon' DATA TO CHECK 'curvilinear' CODE!!!")
-    dlat_set = len(lat_set)
-    dlon_set = len(lon_set)
-    lat_set_tmp = np.zeros([dlat_set,dlon_set])
-    lon_set_tmp = np.zeros([dlat_set,dlon_set])
-    for y in range(dlat_set):
-        lat_set_tmp[y,:] = lat_set[y]
-    for x in range(dlon_set):
-        lon_set_tmp[:,x] = lon_set[x]
-    lat_set = lat_set_tmp
-    lon_set = lon_set_tmp
-    #...TEST
-    '''
 
     # - check if defined domain is within field domain
     if gridtype == 'curvilinear':
@@ -417,19 +397,6 @@ def read_sites():
         lon_s = np.array(lon_s)
         lat_s = np.array(lat_s)
 
-    '''
-    #CAUTION: old, only for preprocessed NCDF files with core areas defined
-    else:
-        # - read file, select lon&lat
-        input_data = Dataset(cf.sites_path)
-        if cf.sites_iso_or_not in ['not','no','n','nein','nicht']:
-            lat_s = input_data.groups['all_sites'].variables['lat'][:]
-            lon_s = input_data.groups['all_sites'].variables['lon'][:]
-        else:
-            lat_s = input_data.groups['sites_in_isolines'].variables['lat'][:]
-            lon_s = input_data.groups['sites_in_isolines'].variables['lon'][:]
-        input_data.close()
-    '''
 
     ### optional selection of sub-region ###
     if cf.sites_region == 'west':
@@ -771,14 +738,7 @@ def plot_distinct(pres_means,pres_stds,distinct):
 
     # - prep
     plot_outname=cf.output_path_common+'/plot_distinct.pdf'
-    '''
-    if cf.plot_hist_fieldsel == 'use':
-        hist_nsubplots = eu.ninfields_use
-        hist_outname=hist_outname+'-use'
-    else: #'all'
-        hist_nsubplots = eu.ninfields
-        hist_outname=hist_outname+'-all'
-    '''
+
     clr_mean = 'green'
     clr_std = 'purple'
     clr_distinct = 'gray'

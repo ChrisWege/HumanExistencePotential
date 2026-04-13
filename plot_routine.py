@@ -26,8 +26,8 @@ def plot_potential():
     ############## CONFIG ###############
     # - model input
     stat_type = 'mean' #'mean' 'stdev'
-    path = '/data/hescor/akoepke/HEP-WHB'
-    expname_common = 'southern_Africa' #'sAfrica' #'southern_Africa'
+    path = '/PATH/TO/HEP_OUTPUT'
+    expname_common = '' #'sAfrica' #'southern_Africa'
     hep_indata = 'Krapp21' #'paleoVeg-grouped' #'Krapp21'
     hep_time = '' #'-77ka-E17p5' #'-125ka' #'' '-125ka'
     hep_method = 'logreg' #'simpleFit' 'logreg'
@@ -39,7 +39,7 @@ def plot_potential():
     print('reading intput file:',input_file)
 
     # - site input
-    path_sites = ['/data/hescor/akoepke/HEP-WHB/presence_locations.xlsx'] 
+    path_sites = ['/PATH/TO/ARCHAEOLOGICAL_DATA/presence_locations.xlsx'] 
     sites_latname = 'Latitude'     # name of lat variable in site files (string)
     sites_lonname = 'Longitude'
 
@@ -59,7 +59,7 @@ def plot_potential():
     annotate = False
     text_anno = "b)"
     contourbar = True
-    plot_title = 'HEP Model idealized'  # e.g. 'My HEP experiment name'
+    plot_title = 'HEP Example Data'  # e.g. 'My HEP experiment name'
     if stat_type == 'stdev':
         colorscheme = 'YlOrBr' #'YlGnBu' #'viridis' #'RdBu_r' 'seismic' 'bwr' #'coolwarm'
     else:
@@ -190,16 +190,6 @@ def plot_potential():
             #if sites == 0:
             sites_lon = np.array(lon_s)
             sites_lat = np.array(lat_s)
-            '''
-            elif sites == 1:
-                lon_phase2 = np.array(lon_s)
-                lat_phase2 = np.array(lat_s)
-                np.delete(lat_phase2, np.where(lon_phase2 > 30))
-                np.delete(lon_phase2, np.where(lon_phase2 > 30))
-            else:
-                lon_core_sites = np.array(lon_s)
-                lat_core_sites = np.array(lat_s)
-            '''
             sites += 1
     
         sites_lon_map, sites_lat_map = m(sites_lon, sites_lat) # compute map proj coordinates

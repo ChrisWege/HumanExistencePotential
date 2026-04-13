@@ -181,9 +181,6 @@ def back_transpose_data_set(data_set, dlat, dlon):
 # check if lat/lon fields cover defined domain
 
 def check_domain(lat_min,lat_max,lon_min,lon_max,lat_set,lon_set):
-    """
-    :return:
-    """
     ### CHECK DOMAIN ###
     # - get min and max lat/lon: rounded to +-0.1deg
     lat_set_min = ma.floor(np.min(lat_set)*10)/10
@@ -256,10 +253,6 @@ def cut_unspecified_regions(llat, llon):
 ##### AFRICA_OR_EUROPE ##################
 # (currently unused!)
 def Africa_or_Europe(llat, llon):
-    """
-    Is the lattice point in Africa or Europe?
-    :return:Africa = 1, Europe = 0
-    """
     continent = 0
 
     if llon < 0:

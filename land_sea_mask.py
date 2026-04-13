@@ -1,8 +1,7 @@
 """
 A land-sea mask is a binary grid that indicates whether each grid cell is land or sea. 
 
-In this case it is synthetically generated for testing purposes, with a simple pattern. 
-It serves to demonstrate how to use a land-sea mask within the HEP model.
+In this case it is generated for testing purposes. It serves to demonstrate how to use a land-sea mask within the HEP model.
 The land-sea mask should have the same domain as the site locations created with site_locations.py. 
 
 The data that is used for the mask is from Natural Earth Data. (see README for Details)

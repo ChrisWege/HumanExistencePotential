@@ -1,3 +1,7 @@
+import numpy as np
+import pandas as pd
+from scipy.special import expit
+
 """ 
 Site locations are generated here and saved to the set path.
 These site locations are synthetically generated for the purpose of testing the code. 
@@ -10,11 +14,6 @@ Depending on preference grid definition and parameters can be changed. With that
 can be tested as well. 
 
 """
-
-# UNDER CONSTRUCTION
-import numpy as np
-import pandas as pd
-from scipy.special import expit
 
 # Grid definition
 nx = 50

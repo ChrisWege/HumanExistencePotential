@@ -471,7 +471,7 @@ def train_simple_fit(pres,iv_set,hep_mask,dlat,dlon):
     pres_gamma_alpha = np.zeros(eu.ninfields_use)
     pres_gamma_beta = np.zeros(eu.ninfields_use)
     pres_gamma_shift = np.zeros(eu.ninfields_use)
-    lnphi_i = np.zeros(iv_set.shape) #(npoints,ninfields_use)
+    lnphi_i = np.zeros(iv_set.shape) 
     weight = np.zeros(eu.ninfields_use)
     phi_e = np.zeros(npoints)
 
@@ -480,7 +480,7 @@ def train_simple_fit(pres,iv_set,hep_mask,dlat,dlon):
     dstds = np.zeros(eu.ninfields_use)
     distinct = np.zeros(eu.ninfields_use)
 
-    # --- calc statistics at presence points, distinctiveness (all .vs. pres) of human presence conditions for each input field
+    # - calc statistics at presence points, distinctiveness (all .vs. pres) of human presence conditions for each input field
 
     for iuse in range(eu.ninfields_use):
 
@@ -514,24 +514,21 @@ def train_simple_fit(pres,iv_set,hep_mask,dlat,dlon):
     distinct_sum = np.sum(distinct)
     for iuse in range(eu.ninfields_use):
         # - calc normalized weight wrt input fields
-        # weight[iuse] = 1./eu.ninfields_use #(org,no weight)
         weight[iuse] = distinct[iuse]/distinct_sum
         # - application to investigation data: HEP component for each field
         lnphi_i[:,iuse] = - weight[iuse]* ((iv_set[:,iuse]-pres_means[iuse])**2) / (2*(pres_stds[iuse]**2))
 
         print('distincit(mean-part)=',dmeans[iuse]**2,', std-part=',min(dstds[iuse],0.)**2)
         print(eu.trainfield_names[iuse],': distinctiveness(rms)=',distinct[iuse], ' ->weight=',weight[iuse])
-        # print('input field weights=',weight)
 
     # - finalize total prediction
     phi_1d = np.exp(np.sum(lnphi_i,axis=1)) #(npoints)
     phi_e = eu.back_transpose_data_set(phi_1d[:], dlat, dlon) #(nx,ny)
-    # prediction[:, 1]
     phi_e.mask = hep_mask #(nx,ny)
     phi_e.filled(0.)
     print('HEP range: min=',np.min(phi_e),', mean=',np.mean(phi_e),', max=',np.max(phi_e))
 
-    # --- plot distinctiveness
+    # - plot distinctiveness
     if cf.plot_distinct: eio.plot_distinct(pres_means,pres_stds,distinct)
 
     return phi_e
@@ -541,10 +538,6 @@ def train_simple_fit(pres,iv_set,hep_mask,dlat,dlon):
 # do main calculation of HEP (parallel)
 
 def main_calculation(irun, iv_set, dlat, dlon, training_set, pre, abs, apri, pre_points, abs_points, apri_points,hep_mask):
-    """
-
-    :return:
-    """
 
     # - select training/test data (random)
     x_train, y_train, x_test, y_true, pre_abs_matrix = \
