@@ -20,7 +20,6 @@ import copy
 process_count = 8   # Number of processes, should be smaller than cpu number
 
 ### general input & config ###
-expname_common = '' # project specific experiment name: common string in land-sea mask & site files
 # path to input file with land-sea data (string)
 path_land_sea_mask = '/PATH/TO/land_sea_mask.nc'
 
@@ -65,11 +64,11 @@ soil_varname_t = 'Band1'           # name of soil field in training soil file (s
 ### investigation input & config (for application of HEP parameters) ###
 # - grid
 gridtype_i = gridtype_t     # grid type in investigation input files ('curvilinear' / 'lonlat')
-# lat-lon coordinates of domain boundaries for investigation data (real, in deg)
+# - lat-lon coordinates of domain boundaries for investigation data (real, in deg)
 lat_min_i = lat_min_t
 lat_max_i = lat_max_t
 lon_min_i = lon_min_t
-lon_max_i = lon_max_t # sAfrica: exclude desert-population: apply to whole sAfrica: 40
+lon_max_i = lon_max_t 
 
 # - main input fields
 # path to input file for training (string)
@@ -77,10 +76,12 @@ input_path_i = input_path_t # input path for training
 input_latname_i = input_latname_t #'y'  # name of lat variable in investigation input files (string)
 input_lonname_i = input_lonname_t #'x'  # name of lon variable in investigation input files (string)
 input_filedim_type_i = input_filedim_type_t # dimension of input fields that is stored in individual input files (string)
+
 # list of names of input fields in investigation input files (string)
 input_varnames_i = copy.copy(input_varnames_t) #['Bio1', 'Bio2', 'Bio3','Bio4', 'Bio5', 'Bio6', 'Bio7', 'Bio8','Bio9', 'Bio10', 'Bio11', 'Bio12','Bio13', 'Bio14', 'Bio15',
 #                  'Bio16', 'Bio17', 'Bio18', 'Bio19']
 input_onefield_i = input_onefield_t     # flag if all variables are in one field in input file, false=each variable in separate field (flag)
+
 # - soil
 soil_path_i = soil_path_t       # path to input soil file for investigation (string)
 soil_varname_i = soil_varname_t # name of soil field in investigation soil file (string)
@@ -90,6 +91,7 @@ soil_varname_i = soil_varname_t # name of soil field in investigation soil file 
 sites_region = 'all'           # option for area subselection (default 'all' / 'east':lon>10deg / 'west':lon<=10deg, string)
 sites_latname = 'Latitude'     # name of lat variable in site files (string)
 sites_lonname = 'Longitude'    # name of lon variable in site files (string)
+
 # path to input files with archeological site data (list of strings)
 sites_path = ['/PATH/TO/ARCHAEOLOGICAL_DATA/presence_locations.xlsx']
 
@@ -97,34 +99,38 @@ sites_path = ['/PATH/TO/ARCHAEOLOGICAL_DATA/presence_locations.xlsx']
 ### calculation config ###
 # - data use
 # bioclim using the Number of Bioclim, starting with 1 (not 0 as usual in python!)
-input_var_use = list(range(1,nbioclim_def+1))#[1,8,10,16] #default(LBK):[1,2,12,18]
+
+input_var_use = list(range(1,nbioclim_def+1)) #current setup if using Krapp2021 Data
 #input_var_use = [1,2,3,4,5,6,7,10,11,12,13,14,16,17,18] #stdev<1-only
-#input_var_use = [1,3,4] #paleoVeg-grouped-77ka:stdev<1-only
+
 soil_use = False #flag, if soil data are additionally used (default False, flag)
+
 # select type of limits for apriori absence points: 0=none, 1=predefined 'bio*_min/max', 2=min/max of any pres conditions (for each infield), 3=min/max of all pres cond
 absapri_limits_mode = 2
+
 # define limits of bioclim variables for apriori absence points
 bio1_min = -30. #minimum limit for annual mean temp [degC]
 bio1_max = 160. #maximum limit for annual mean temp [degC]
-bio2_min = 0.  #minimum limit for mean diurnal temp range [degC]
+bio2_min = 0.   #minimum limit for mean diurnal temp range [degC]
 bio2_max = 100. #maximum limit for mean diurnal temp range [degC]
 
 # - data preparation
 #[input-dependent:defined above] 
 infields_ext_mode = 0   # simpleFit-only: extend input fields: 0=none, bit1=quadratic cross-terms, ...TODO:gradients... (default False, int)
-sample_factor = 1 # Sample factor for the downscaling investigation. When altering it, increase the radius similarly (default: 1, CAUTION: integer-only!)
+sample_factor = 1       # Sample factor for the downscaling investigation. When altering it, increase the radius similarly (default: 1, CAUTION: integer-only!)
 train_absapri_only = False  #flag, if training with apriori absence only, or both pseudo absence and apriori absence (default False, flag)
                             # CAUTION: all absence points are used if too few apriori-absence points for training
 train_absapri_minnum = 20 #minimum number of apriori-absence points if training only with them (only for train_absapri_only = True), otherwise: use also pseudo absence (int)
-dataratio_trai = 1. #0.8 #relative amount of data to use for training vs testing, default=0.8 (0.<real<=1.)
-                         # NOTE: if =1, runs differ only by random selection of pseudo-abs points (if abs_fraction<1)
-abs_fraction = 1. #1./3. #relative amount of pseudo-absence data to use, default=1./3. (0.<real<=1.)
-                         # NOTE: if =1, runs differ only by random splitting of trainig/test data (if dataratio_trai<1)
+dataratio_trai = 1.       #relative amount of data to use for training vs testing, default=0.8 (0.<real<=1.)
+                          # NOTE: if =1, runs differ only by random selection of pseudo-abs points (if abs_fraction<1)
+abs_fraction = 1.         #relative amount of pseudo-absence data to use, default=1./3. (0.<real<=1.)
+                          # NOTE: if =1, runs differ only by random splitting of trainig/test data (if dataratio_trai<1)
 
 # - calculation
 runs = 50 #20 50 ref:1000       # number of different HEP calculations = ensemble size (int)
                                 #(=realizations wrt random splitting of training/test data & random selection of pseudo-abs points)
                                 #CAUTION: set to 1 if no ranom sampling (if dataratio_trai = 1. & abs_fraction = 1.)
+
 # Choose statistical model to fit training data (string)
 model_training = 'logreg'      # 'logreg':logistic regression / 'rf':random forest / 'simpleFit': simple (Gaussian) fit for each input field
 logreg_lasso = 1               # inverse regularization strength of minimization in logistic regression (default 1.0, int)
@@ -134,14 +140,15 @@ logreg_max_iter = 100          # maximal number of iterations for fit convergenc
 
 ### plot & output config ###
 output_path_common = '/PATH/TO/OUTPUT/'      # common part of output path for plots and data (string)
+
 # - plots
 annotate = False        # flag if annotation text to be plotted (flag)
 text_anno = "d)"        # annotation text  in plot (string)
 figsize_ref = (10,10)   # reference size of plots (tuple of real)
 
-plot_presabs = True     # flag if presence/absence map to be plotted (flag)
+plot_presabs = True                                             # flag if presence/absence map to be plotted (flag)
 plot_presabs_path = output_path_common+'/plot_pres-abs.pdf'     # path to output presence-absence plot (string)
-plot_presabs_markersize = 1.*50 #pre_radius_site #ref:160       # markersize in presence-absence plot (real)
+plot_presabs_markersize = 1.*50                                 # markersize in presence-absence plot (real)
 
 plot_hist = True           # flag if histogram of normalized input fields at pres/abs points to be plotted (flag)
 plot_hist_fieldsel = 'all' # define which input fields to plot in histogram: 'all' / 'use' (string)
@@ -149,7 +156,7 @@ plot_hist_norm = False     # flag if x-values on histogram should be normalized 
 plot_hist_log = True       # flag if count (y-axis) of histogram should be logaritmic (suggested for small #pres/#abs ratio, default: False flag)
 plot_hist_max = 5.         # maximum for normalized x-values to be plotted in histogram
 
-plot_distinct = True    # flag if distinctiveness (all .vs. pres) of human presence conditions to be plotted (flag)
+plot_distinct = True       # flag if distinctiveness (all .vs. pres) of human presence conditions to be plotted (flag)
 
 # - data
 ehep_outpath = output_path_common+'/hep-out.nc' # path to main output file (string)
