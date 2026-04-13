@@ -9,11 +9,7 @@ It defines the experiment setup used by the rest of the pipeline, including:
 - Model preparation and fitting choices (variable selection, presence/absence sampling, run count, and model hyperparameters).
 - Plotting and output destinations.
 
-For convenience and easy switching between data and projects several sections are conditionally configured from key strings (for
-example, region name in `expname_common` or dataset type in `input_path_t`), so changing those values can automatically switch
-related settings.
-
-Some sections are project-specific configurations that need to be changed according to the use case. 
+Some sections are project-specific configurations that need to be changed according to the use case.
 
 """
 
@@ -26,7 +22,7 @@ process_count = 8   # Number of processes, should be smaller than cpu number
 ### general input & config ###
 expname_common = '' # project specific experiment name: common string in land-sea mask & site files
 # path to input file with land-sea data (string)
-path_land_sea_mask = '/data/hescor/akoepke/HEP-WHB/land_sea_mask.nc'
+path_land_sea_mask = '/PATH/TO/land_sea_mask.nc'
 
 
 # - inputfield-related setup used for training and investigation (for simplicity)
@@ -44,58 +40,22 @@ gridtype_t = 'lonlat'   # grid type in training input files:  'lonlat'=common lo
                         #                                     'curvilinear'=irregular lon/lat given for each gridpoint
 # lat-lon coordinates of domain boundaries for training data (real, in deg N/E ->use neg values for S/W)
 # needs to be changed depending on project and domain boundaries
-if 'southern' in expname_common:
-    lat_min_t = -35
-    lat_max_t = -16.5
-    lon_min_t = 10
-    lon_max_t = 40 #sAfrica:exclude desert-population: 17.5
-else: # use the lat/lon bounds that match arrays (default: land_sea_mask from land_sea_mask.py)
-    # defaults chosen to match the example 50x50 test grid used in site_locations.py
-    lat_min_t = -25
-    lat_max_t = -15
-    lon_min_t = 15
-    lon_max_t = 25
+# defaults chosen to match the example 50x50 test grid used from example data
+lat_min_t = -25
+lat_max_t = -15
+lon_min_t = 15
+lon_max_t = 25
 
 
 # main input fields (bioclim,vegetation) 
 # path to main input file for training (string)
-input_path_t = '/data/hescor/pschluet/pastclim/Krapp2021/Krapp2021_' #e.g. BioClim Dataset by Krapp2021
-# project specific configurations, needs to be changed depending on project and input_path_t
-if 'paleoVeg' in input_path_t: #paleoVeg vegetation fractions
-    input_latname_t = 'y'     # name of lat variable in training files (string)
-    input_lonname_t = 'x'     # name of lon variable in training files (string)
-    input_onefield_t = True   # flag if all input variables are in one field in input file, false=each variable in separate field (flag)
-    input_varnames_t = ['vegetation']    # list of names of input fields in training input files (list of string)
-    #input_varnames_t = ['Bio1', 'Bio2', 'Bio3','Bio4', 'Bio5', 'Bio6', 'Bio7', 'Bio8','Bio9', 'Bio10', 'Bio11', 'Bio12','Bio13', 'Bio14', 'Bio15',
-    #                  'Bio16', 'Bio17', 'Bio18', 'Bio19'] # have to adjust these to allow a list
-    input_filedim_type_t = 'field'  # dimension of input fields that is stored in individual input files (string)
-    pre_radius_site = 50            # Radius of the presence around site, CAUTION: ~grid resolution (in km, default: 50)
-elif 'Krapp' in input_path_t: #Krapp21 bioclim data specific setup
-    input_latname_t = 'latitude'    # name of lat variable in training input files (string)
-    input_lonname_t = 'longitude'   # name of lon variable in training input files (string)
-    input_onefield_t = True         # flag if all variables (eg bioclim/vegetation) are in one field in input file, false=each variable in separate field (flag)
-    input_varnames_t = input_filetime_pathfield   # list of names of input fields in training input files (list of string)
-    input_filedim_type_t = 'time'  # dimension of input fields that is stored in individual input files (string)
-    pre_radius_site = 50 # Radius of the presence around site, CAUTION: ~grid resolution (in km, default: 50)
-else: #eg 'Armstrong' #Armstrong bioclim data specific setup
-    input_latname_t = 'y'     # name of lat variable in training input files (string)
-    input_lonname_t = 'x'     # name of lon variable in training input files (string)
-    input_onefield_t = True   # flag if all input variables are in one field in input file, eg as 3rd dimension, false=each variable in separate field (flag)
-    input_varnames_t = ['bio_var']    # list of names of input fields in training input files (list of string)
-    #input_varnames_t = ['Bio1', 'Bio2', 'Bio3','Bio4', 'Bio5', 'Bio6', 'Bio7', 'Bio8','Bio9', 'Bio10', 'Bio11', 'Bio12','Bio13', 'Bio14', 'Bio15',
-    #                  'Bio16', 'Bio17', 'Bio18', 'Bio19'] # have to adjust these to allow a list
-    input_filedim_type_t = 'field'  # dimension of input fields that is stored in individual input files (string)
-                                # !if 'time': see also 'input_filetime_*' for specific setup!
-                                # - TODO'none': only one field at one time in file
-                                # - 'field'(default): all fields in one file, only one time in file
-                                # - 'time': diff times in one file, only one field in file
-                                #       !requires list of biovar-parts of path for each variable in 'input_filetime_pathfield'
-                                #       !requires common pre-biovar-part of path in 'biolim_path_t' & post-biovar-part in 'input_filetime_pathend'
-                                #       !requires one-entry list 'input_varnames_t' for common fieldname in each file
-                                #           OR list with field-dimension of 'input_filetime_pathfield'
-                                #       !requires 'input_filetime_{fieldname}&{timeid}'
-                                # - TODO'fieldtime' :all fields for diff times in one file, requires time-specific config
-    pre_radius_site = 50 # Radius of the presence around site, CAUTION: ~grid resolution (in km, default: 50)
+input_path_t = '/PATH/TO/BIOCLIM_DATA/Krapp2021_' # e.g. BioClim Dataset by Krapp2021
+input_latname_t = 'latitude'     # name of lat variable in training input files (string)
+input_lonname_t = 'longitude'   # name of lon variable in training input files (string)
+input_onefield_t = True         # flag if all variables (eg bioclim/vegetation) are in one field in input file, false=each variable in separate field (flag)
+input_varnames_t = input_filetime_pathfield   # list of names of input fields in
+input_filedim_type_t = 'time'  # dimension of input fields that is stored in individual input files (string)
+pre_radius_site = 50 # Radius of the presence around site, CAUTION: ~grid resolution (in km, default: 50)
 
 # - soil
 # path to input soil file for training (string)
@@ -131,7 +91,7 @@ sites_region = 'all'           # option for area subselection (default 'all' / '
 sites_latname = 'Latitude'     # name of lat variable in site files (string)
 sites_lonname = 'Longitude'    # name of lon variable in site files (string)
 # path to input files with archeological site data (list of strings)
-sites_path = ['/data/hescor/akoepke/HEP-WHB/presence_locations.xlsx']
+sites_path = ['/PATH/TO/ARCHAEOLOGICAL_DATA/presence_locations.xlsx']
 
 
 ### calculation config ###
@@ -173,7 +133,7 @@ logreg_max_iter = 100          # maximal number of iterations for fit convergenc
 
 
 ### plot & output config ###
-output_path_common = '/data/hescor/akoepke/HEP-WHB'      # common part of output path for plots and data (string)
+output_path_common = '/PATH/TO/OUTPUT/'      # common part of output path for plots and data (string)
 # - plots
 annotate = False        # flag if annotation text to be plotted (flag)
 text_anno = "d)"        # annotation text  in plot (string)
