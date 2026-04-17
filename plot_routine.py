@@ -26,7 +26,7 @@ def plot_potential():
     ############## CONFIG ###############
     # - model input
     stat_type = 'mean' #'mean' 'stdev'
-    path = '/PATH/TO/HEP_OUTPUT'
+    path = '/PATH/TO/HEP_OUTPUT/'
     expname_common = '' #'sAfrica' #'southern_Africa'
     hep_indata = 'Krapp21' #'paleoVeg-grouped' #'Krapp21'
     hep_time = '' #'-77ka-E17p5' #'-125ka' #'' '-125ka'
