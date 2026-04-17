@@ -21,6 +21,7 @@ process_count = 8   # Number of processes, should be smaller than cpu number
 
 ### general input & config ###
 # path to input file with land-sea data (string)
+# example data via land_sea_mask.py
 path_land_sea_mask = '/PATH/TO/land_sea_mask.nc'
 
 
@@ -139,7 +140,7 @@ logreg_max_iter = 100          # maximal number of iterations for fit convergenc
 
 
 ### plot & output config ###
-output_path_common = '/PATH/TO/OUTPUT/'      # common part of output path for plots and data (string)
+output_path_common = '/PATH/TO/OUTPUT'      # common part of output path for plots and data (string)
 
 # - plots
 annotate = False        # flag if annotation text to be plotted (flag)
