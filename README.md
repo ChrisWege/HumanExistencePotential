@@ -51,15 +51,6 @@ More information: https://www.hescor-project.com/
 
 Further details on data preparation and assumptions are described in `routine_overview.md`.
 
-## Example Data
-
-For an easy start, a set of scripts for generating example data is provided:
-
-- `site_locations.py` – Generates site locations, presence, and a-priori absence points
-- `land_sea_mask.py` – Generates a land-sea mask that fits the site locations (Data by [Natural Earth Data](https://www.naturalearthdata.com/), which is a public domain data set)
-
-The **pastclim_Krapp2021** dataset by Krapp et al. (2021) can be downloaded here: [pastclim_Krapp2021 Zenodo](https://zenodo.org/records/8415273).
-
 ## Quick Setup
 
 A setup script is provided to create an isolated Python virtual environment and install all required dependencies.
@@ -109,6 +100,14 @@ The resulting HEP maps can be visualized using:
 python3 plot_hep.py
 ```
 
+## Example Input Data
+
+For an easy start, a set of scripts for generating example data is provided:
+
+- `site_locations.py` – Generates site locations, presence, and a-priori absence points
+- `land_sea_mask.py` – Generates a land-sea mask that fits the site locations (Data by [Natural Earth Data](https://www.naturalearthdata.com/), which is a public domain data set)
+
+The **pastclim_Krapp2021** dataset by Krapp et al. (2021) can be downloaded here: [pastclim_Krapp2021 Zenodo](https://zenodo.org/records/8415273).
 
 
 ## Outputs
