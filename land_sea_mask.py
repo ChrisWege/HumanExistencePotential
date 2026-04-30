@@ -4,7 +4,7 @@ A land-sea mask is a binary grid that indicates whether each grid cell is land o
 In this case it is generated for testing purposes. It serves to demonstrate how to use a land-sea mask within the HEP model.
 The land-sea mask should have the same domain as the site locations created with site_locations.py. 
 
-The data that is used for the mask is from Natural Earth Data. (see README for Details)
+The data that is used for the mask is from Natural Earth Data. (see README for Link and Details)
 
 """
 # UNDER CONSTRUCTION
@@ -77,8 +77,8 @@ def write_mask_to_netcdf(output_path, lat, lon, mask):
 
 
 if __name__ == "__main__":
-    nx = 50
-    ny = 50
+    nx = 100
+    ny = 100
     lat = np.linspace(LAT_MIN, LAT_MAX, ny)
     lon = np.linspace(LON_MIN, LON_MAX, nx)
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         sys.exit(2)
 
     # write results to output directory
-    output_path = "/data/hescor/akoepke/HEP-WHB/land_sea_mask.nc"
+    output_path = "PATH/TO/OUTPUT/land_sea_mask.nc"
     write_mask_to_netcdf(output_path, lat, lon, mask)
     print(f"Mask is saved in: {output_path}")
 
