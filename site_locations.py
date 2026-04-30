@@ -16,8 +16,8 @@ can be tested as well.
 """
 
 # Grid definition
-nx = 50
-ny = 50
+nx = 100
+ny = 100
 lat = np.linspace(-25, -15, ny) 
 lon = np.linspace(15, 25, nx)
 
