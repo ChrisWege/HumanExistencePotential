@@ -9,9 +9,12 @@ In a real application, these would be based on actual data.
 
 For the example usage the provided code generates a xlsx-file with site locations that follow a 
 logistic curve where the distribution of site location follows a gradient from west to east. 
+With this gradient a higher HEP can be expected in the west lowering toward east.
 
 Depending on preference grid definition and parameters can be changed. With that different configurations 
 can be tested as well. 
+
+!! The domain has to match the the domain set in configure.py and can be changed depending on preferences. 
 
 """
 
