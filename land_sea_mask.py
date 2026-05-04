@@ -6,6 +6,8 @@ The land-sea mask should have the same domain as the site locations created with
 
 The data that is used for the mask is from Natural Earth Data. (see README for Link and Details)
 
+!! The domain has to match the the domain set in configure.py and can be changed depending on preferences. 
+
 """
 # UNDER CONSTRUCTION
 
@@ -28,8 +30,9 @@ LON_MAX = 25.0
 
 def create_mask_from_naturalearth(lat, lon, cache_dir=None):
     """
-	Create a land/sea mask (1=land, 0=sea) by using Natural Earth 'land'.
-    lat: 1D array (ny,), lon: 1D array (nx,). Returns ndarray (ny,nx) dtype int8.
+	Create land/sea mask (1=land, 0=sea) by using Natural Earth 'land'
+    lat: 1D array (ny,), lon: 1D array (nx,)
+	Returns ndarray (ny,nx) dtype int8
     """
 
     # Acquire Natural Earth 'land' shapefile 
