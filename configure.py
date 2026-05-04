@@ -1,7 +1,7 @@
 """Central configuration for the HEP workflow.
 Before running the model data paths need to be defined in this configuration file. 
 
-It defines the experiment setup used by the rest of the pipeline, including:
+This file defines the experiment setup used by the rest of the pipeline, including:
 
 - Technical runtime options (for example, process count).
 - Input data sources and naming conventions (land-sea mask, climate, vegetation, soil, and site files).
@@ -104,7 +104,7 @@ sites_path = ['/PATH/TO/ARCHAEOLOGICAL_DATA/presence_locations.xlsx']
 input_var_use = list(range(1,nbioclim_def+1)) #current setup if using Krapp2021 Data
 #input_var_use = [1,2,3,4,5,6,7,10,11,12,13,14,16,17,18] #stdev<1-only
 
-soil_use = False #flag, if soil data are additionally used (default False, flag)
+soil_use = False #flag, if soil data are additionally used (default: False)
 
 # select type of limits for apriori absence points: 0=none, 1=predefined 'bio*_min/max', 2=min/max of any pres conditions (for each infield), 3=min/max of all pres cond
 absapri_limits_mode = 2
@@ -117,7 +117,7 @@ bio2_max = 100. #maximum limit for mean diurnal temp range [degC]
 
 # - data preparation
 #[input-dependent:defined above] 
-infields_ext_mode = 0   # simpleFit-only: extend input fields: 0=none, bit1=quadratic cross-terms, ...TODO:gradients... (default False, int)
+infields_ext_mode = 0   # CAUTION: simpleFit-only: extend input fields: 0=none, bit1=quadratic cross-terms
 sample_factor = 1       # Sample factor for the downscaling investigation. When altering it, increase the radius similarly (default: 1, CAUTION: integer-only!)
 train_absapri_only = False  #flag, if training with apriori absence only, or both pseudo absence and apriori absence (default False, flag)
                             # CAUTION: all absence points are used if too few apriori-absence points for training
