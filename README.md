@@ -29,16 +29,18 @@ More information: https://www.hescor-project.com/
 
 ## Repository Contents
 
-- `README.md` – Project overview and usage instructions  
-- `pyvenv_list.txt` – Python package dependencies  
-- `setup.sh` – Script for creating a local virtual environment  
+- `README.md` – Project overview and usage instructions
+- `routine_overview.md` – Detailed overview of the model workflow
+- `setup.sh` – Script for creating a local virtual environment
+- `pyvenv_list.txt` – Python package dependencies    
 - `configure.py` – Configuration settings for model execution  
 - `ehep_run.py` – Main execution script  
 - `ehep_methods.py` – Model calculation functions  
 - `ehep_inout.py` – Input/output handling functions  
 - `ehep_util.py` – Utility functions  
 - `plot_routine.py` – Script for plotting the HEP map  
-- `routine_overview.md` – Detailed overview of the model workflow  
+
+Example Data: 
 - `site_locations.py` – Generates site locations, presence and a-priori absence points (example data)
 - `land_sea_mask.py` – Generates a land sea mask (example data)
 
@@ -106,8 +108,7 @@ For an easy start, a set of scripts for generating example data is provided:
 
 - `site_locations.py` – Generates site locations, presence, and a-priori absence points
 - `land_sea_mask.py` – Generates a land-sea mask that fits the site locations (Data by [Natural Earth Data](https://www.naturalearthdata.com/), which is a public domain data set)
-
-The **pastclim_Krapp2021** dataset by Krapp et al. (2021) can be downloaded here: [pastclim_Krapp2021 Zenodo](https://zenodo.org/records/8415273).
+- The **pastclim_Krapp2021** dataset by Krapp et al. (2021) can be downloaded here: [pastclim_Krapp2021 Zenodo](https://zenodo.org/records/8415273).
 
 
 ## Outputs
@@ -118,7 +119,7 @@ Typical outputs include:
 * Intermediate data products generated during model execution
 * Visualizations of model results
 
-Output formats and locations are configurable via `configure.py`.
+Output formats and directories are configurable via `configure.py`.
 
 
 
