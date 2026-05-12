@@ -30,19 +30,25 @@ More information: https://www.hescor-project.com/
 ## Repository Contents
 
 - `README.md` – Project overview and usage instructions
-- `routine_overview.md` – Detailed overview of the model workflow
+- `routine_overview.md` – Detailed overview of the model workflow 
+
+Setup: 
 - `setup.sh` – Script for creating a local virtual environment
-- `pyvenv_list.txt` – Python package dependencies    
+- `pyvenv_list.txt` – Python package dependencies 
+
+HEP: 
 - `configure.py` – Configuration settings for model execution  
 - `ehep_run.py` – Main execution script  
 - `ehep_methods.py` – Model calculation functions  
 - `ehep_inout.py` – Input/output handling functions  
-- `ehep_util.py` – Utility functions  
+- `ehep_util.py` – Utility functions
+
+Plot:
 - `plot_routine.py` – Script for plotting the HEP map  
 
-Example Data: 
-- `site_locations.py` – Generates site locations, presence and a-priori absence points (example data)
-- `land_sea_mask.py` – Generates a land sea mask (example data)
+Test Data: 
+- `site_locations.py` – Generates site locations, presence and a-priori absence points (example data, synthetically generated)
+- `land_sea_mask.py` – Generates a land sea mask (example data based on Natural Earth Data)
 
 ## Prerequisites
 
@@ -99,17 +105,18 @@ Model configuration parameters (e.g. input data paths, output locations) are def
 The resulting HEP maps can be visualized using:
 
 ```bash
-python3 plot_hep.py
+python3 plot_routine.py
 ```
 
-## Example Input Data
+## Test Input Data
 
-For an easy start, a set of scripts for generating example data is provided:
+For an easy start, a set of scripts for generating test data is provided:
 
-- `site_locations.py` – Generates site locations, presence, and a-priori absence points
+- `site_locations.py` – Generates site locations, presence, and a-priori absence points (this data is synthetically generated and is not based on real data)
 - `land_sea_mask.py` – Generates a land-sea mask that fits the site locations (Data by [Natural Earth Data](https://www.naturalearthdata.com/), which is a public domain data set)
 - The **pastclim_Krapp2021** dataset by Krapp et al. (2021) can be downloaded here: [pastclim_Krapp2021 Zenodo](https://zenodo.org/records/8415273).
 
+With this data a first HEP calculation can be done. 
 
 ## Outputs
 
@@ -117,7 +124,7 @@ Typical outputs include:
 
 * Raster maps representing Human Existence Potential
 * Intermediate data products generated during model execution
-* Visualizations of model results
+* Visualizations of model results 
 
 Output formats and directories are configurable via `configure.py`.
 
