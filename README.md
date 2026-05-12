@@ -29,24 +29,25 @@ More information: https://www.hescor-project.com/
 
 ## Repository Contents
 
+#### General Information
 - `README.md` – Project overview and usage instructions
 - `routine_overview.md` – Detailed overview of the model workflow 
 
-Setup: 
+#### Setup of virtual environment
 - `setup.sh` – Script for creating a local virtual environment
 - `pyvenv_list.txt` – Python package dependencies 
 
-HEP: 
+#### HEP
 - `configure.py` – Configuration settings for model execution  
 - `ehep_run.py` – Main execution script  
 - `ehep_methods.py` – Model calculation functions  
 - `ehep_inout.py` – Input/output handling functions  
 - `ehep_util.py` – Utility functions
 
-Plot:
+#### Plot
 - `plot_routine.py` – Script for plotting the HEP map  
 
-Test Data: 
+#### Test Data
 - `site_locations.py` – Generates site locations, presence and a-priori absence points (example data, synthetically generated)
 - `land_sea_mask.py` – Generates a land sea mask (example data based on Natural Earth Data)
 
