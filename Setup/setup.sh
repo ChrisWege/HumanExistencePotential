@@ -7,6 +7,10 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
+#  Creating project directory in home directory
+mkdir -p "$HOME/HEP_MODEL"
+echo "Created project directory: $HOME/HEP_MODEL"
+
 VENV_DIR="venv"
 
 #Updating package list and installing system dependencies
