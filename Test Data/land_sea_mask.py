@@ -94,7 +94,7 @@ if __name__ == "__main__":
         sys.exit(2)
 
     # write results to output directory
-    output_path = "PATH/TO/OUTPUT/land_sea_mask.nc"
+    output_path = "/HEP_MODEL/land_sea_mask.nc"
     write_mask_to_netcdf(output_path, lat, lon, mask)
     print(f"Mask is saved in: {output_path}")
 
