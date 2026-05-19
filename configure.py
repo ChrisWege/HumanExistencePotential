@@ -22,7 +22,7 @@ process_count = 8   # Number of processes, should be smaller than cpu number
 ### general input & config ###
 # path to input file with land-sea data (string)
 # example data via land_sea_mask.py
-path_land_sea_mask = '/PATH/TO/land_sea_mask.nc'
+path_land_sea_mask = '/HEP_MODEL/land_sea_mask.nc'
 
 
 # - inputfield-related setup used for training and investigation (for simplicity)
@@ -49,7 +49,7 @@ lon_max_t = 25
 
 # main input fields (bioclim,vegetation) 
 # path to main input file for training (string)
-input_path_t = '/PATH/TO/BIOCLIM_DATA/Krapp2021_' # e.g. BioClim Dataset by Krapp2021
+input_path_t = '/HEP_MODEL/Krapp2021_' # e.g. BioClim Dataset by Krapp2021
 input_latname_t = 'latitude'     # name of lat variable in training input files (string)
 input_lonname_t = 'longitude'   # name of lon variable in training input files (string)
 input_onefield_t = True         # flag if all variables (eg bioclim/vegetation) are in one field in input file, false=each variable in separate field (flag)
@@ -94,7 +94,7 @@ sites_latname = 'Latitude'     # name of lat variable in site files (string)
 sites_lonname = 'Longitude'    # name of lon variable in site files (string)
 
 # path to input files with archeological site data (list of strings)
-sites_path = ['/PATH/TO/ARCHAEOLOGICAL_DATA/presence_locations.xlsx']
+sites_path = ['/HEP_MODEL/presence_locations.xlsx']
 
 
 ### calculation config ###
@@ -140,7 +140,7 @@ logreg_max_iter = 100          # maximal number of iterations for fit convergenc
 
 
 ### plot & output config ###
-output_path_common = '/PATH/TO/OUTPUT'      # common part of output path for plots and data (string)
+output_path_common = '/HEP_MODEL'      # common part of output path for plots and data (string)
 
 # - plots
 annotate = False        # flag if annotation text to be plotted (flag)
