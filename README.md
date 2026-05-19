@@ -74,6 +74,7 @@ Run the provided setup script to create a local virtual environment and install 
 
 The script will:
 
+* Create a new directory for the project called '/HEP_MODEL'
 * Create (or reuse) a `venv/` directory in the project root
 * Upgrade `pip` inside the environment
 * Install all packages listed in `pyvenv_list.txt`
