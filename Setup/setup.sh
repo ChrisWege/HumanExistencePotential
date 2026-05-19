@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Check if Python is installed
+if ! command -v python3 &> /dev/null; then
+    echo "WARNING: Python 3 is not installed on this system!"
+    echo "Please install Python 3 before running this setup script."
+    exit 1
+fi
+
 VENV_DIR="venv"
 
 #Updating package list and installing system dependencies
