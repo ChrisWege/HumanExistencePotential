@@ -26,7 +26,7 @@ def plot_potential():
     ############## CONFIG ###############
     # - model input
     stat_type = 'mean' #'mean' 'stdev'
-    path = '/PATH/TO/HEP_OUTPUT/'
+    path = '/HEP_MODEL/'
     expname_common = '' #'sAfrica' #'southern_Africa'
     hep_indata = 'Krapp21' #'paleoVeg-grouped' #'Krapp21'
     hep_time = '' #'-77ka-E17p5' #'-125ka' #'' '-125ka'
@@ -39,7 +39,7 @@ def plot_potential():
     print('reading intput file:',input_file)
 
     # - site input
-    path_sites = ['/PATH/TO/ARCHAEOLOGICAL_DATA/presence_locations.xlsx'] 
+    path_sites = ['/HEP_MODEL/presence_locations.xlsx'] 
     sites_latname = 'Latitude'     # name of lat variable in site files (string)
     sites_lonname = 'Longitude'
 
