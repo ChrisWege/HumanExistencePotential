@@ -52,5 +52,5 @@ print(f"Lon range: {presence[:, 1].min():.4f} to {presence[:, 1].max():.4f}")
 
 # Export to Excel
 df = pd.DataFrame(presence, columns=["Latitude", "Longitude"])
-df.to_excel("/data/hescor/akoepke/HEP-WHB/presence_locations.xlsx", index=False)
+df.to_excel("/HEP_MODEL/presence_locations.xlsx", index=False)
 print("Excel file saved!")
