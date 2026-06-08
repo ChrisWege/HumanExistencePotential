@@ -65,15 +65,18 @@ To clone the repository check whether git is installed:
 ```bash
 git --version
 ```
+
 If git is not installed, it can be installed with the following command: 
 ```bash
 sudo apt update
 sudo apt install git
 ```
-When git is installed, clone the repository: 
+
+When installing git was successful, clone the repository: 
 ```bash
 git clone https://github.com/ChrisWege/HumanExistencePotential <name_of_directory>
-``
+```
+
 
 A setup script is provided to create an isolated Python virtual environment and install all required dependencies.
 
