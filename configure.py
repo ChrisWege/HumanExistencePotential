@@ -50,12 +50,11 @@ lon_max_t = 25
 # main input fields (bioclim,vegetation) 
 # path to main input file for training (string)
 input_path_t = '/HEP_MODEL/Krapp2021_' # e.g. BioClim Dataset by Krapp2021
-input_latname_t = 'latitude'     # name of lat variable in training input files (string)
-input_lonname_t = 'longitude'   # name of lon variable in training input files (string)
+input_latname_t = 'latitude'  # 'y'   # name of lat variable in training input files (string)
+input_lonname_t = 'longitude' # 'x'  # name of lon variable in training input files (string)
 input_onefield_t = True         # flag if all variables (eg bioclim/vegetation) are in one field in input file, false=each variable in separate field (flag)
-input_varnames_t = input_filetime_pathfield   # list of names of input fields in
-input_filedim_type_t = 'time'  # dimension of input fields that is stored in individual input files (string)
-pre_radius_site = 50 # Radius of the presence around site, CAUTION: ~grid resolution (in km, default: 50)
+input_varnames_t = input_filetime_pathfield # ['vegetation']  # list of names of input fields in
+input_filedim_type_t = 'time' # 'field' # dimension of input fields that is stored in individual input files (string)
 
 # - soil
 # path to input soil file for training (string)
