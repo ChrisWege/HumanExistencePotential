@@ -106,7 +106,7 @@ input_var_use = list(range(1,nbioclim_def+1)) #current setup if using Krapp2021 
 soil_use = False #flag, if soil data are additionally used (default: False)
 
 # select type of limits for apriori absence points: 0=none, 1=predefined 'bio*_min/max', 2=min/max of any pres conditions (for each infield), 3=min/max of all pres cond
-absapri_limits_mode = 2
+absapri_limits_mode = 0
 
 # define limits of bioclim variables for apriori absence points
 bio1_min = -30. #minimum limit for annual mean temp [degC]
