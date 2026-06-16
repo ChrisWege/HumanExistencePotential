@@ -55,6 +55,7 @@ input_lonname_t = 'longitude' # 'x'  # name of lon variable in training input fi
 input_onefield_t = True         # flag if all variables (eg bioclim/vegetation) are in one field in input file, false=each variable in separate field (flag)
 input_varnames_t = input_filetime_pathfield # ['vegetation']  # list of names of input fields in
 input_filedim_type_t = 'time' # 'field' # dimension of input fields that is stored in individual input files (string)
+pre_radius_site = 50 #default 50km
 
 # - soil
 # path to input soil file for training (string)
