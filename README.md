@@ -1,4 +1,5 @@
 [![GitHub Org](https://img.shields.io/badge/GitHub-HESCOR-blue?logo=github&logoColor=white)](https://github.com/HESCOR)
+[![DOI](https://zenodo.org/badge/1138189363.svg)](https://doi.org/10.5281/zenodo.20746067)
 
 # HEP-Model – Human Existence Potential Model
 
@@ -156,7 +157,7 @@ Output formats and directories are configurable via `configure.py`.
 
 ## Citation
 
-If you use this code in academic work, please cite the associated publication and reference the HESCOR project.
+If you use this code in academic work, please cite the repository, the HESCOR project and, if applicable, the associated publications.
 
 
 ## License
