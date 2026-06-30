@@ -46,7 +46,8 @@ More information: https://www.hescor-project.com/
 - `ehep_util.py` – Utility functions
 
 #### Plot
-- `plot_routine.py` – Script for plotting the HEP map  
+- `plot_routine.py` – Script for plotting the HEP map
+- `input_bioclim.py`– Script for plotting input variables (bioclimatic variables)
 
 #### Test Data
 - `site_locations.py` – Generates site locations, presence and a-priori absence points (example data, synthetically generated)
